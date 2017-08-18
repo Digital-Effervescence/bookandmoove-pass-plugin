@@ -1,0 +1,106 @@
+/* Buttons */
+.de-bam-pass-button {background-color: #FF4D58; display: inline-block; border: 1px solid #FF4D58; border-radius: 4px; padding: 6px 16px; color: #FFFFFF; font-family: Hanken; font-size: 14px; -webkit-transition: all 400ms ease 0s; transition: all 400ms ease 0s;}
+.de-bam-pass-button:hover {background-color: #FFFFFF; color: #FF4D58;}
+
+.de-bam-pass-button.empty {background-color: #FFFFFF; color: #FF4D58;}
+.de-bam-pass-button.empty:hover {background-color: #FF4D58; color: #FFFFFF;}
+
+
+
+#page ul.primary-menu .menu-item.save-code {background-color: #FF4D58; vertical-align: 6px; border-radius: 4px; height: auto; -webkit-transition: 0.1s background-color ease-out; transition: 0.1s background-color ease-out;}
+#page ul.primary-menu .menu-item.save-code:hover {background-color: #484848;}
+#page ul.primary-menu .menu-item.save-code > a {padding: 10px 20px; color: #FFFFFF;}
+
+
+/* Popins */
+#de-bam-pass-popin-container {display: none; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; hyphens: manual; z-index: 999990;}
+#de-bam-pass-popin-container.open {display: block;}
+
+#de-bam-pass-popin-container .de-bam-pass-overlay {display: none; background-color: rgba(0, 0, 0, 0.7); position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999991;}
+#de-bam-pass-popin-container .de-bam-pass-overlay.open {display: inline-block;}
+
+#de-bam-pass-popin-container .de-bam-pass-loader {display: none; position: absolute; left: 50%; top: 50%; margin: -20px 0 0 -20px; font-size: 40px; color: #FFFFFF; z-index: 999992;}
+#de-bam-pass-popin-container .de-bam-pass-loader.open {display: inline-block;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin {background-color: #FFFFFF; position: absolute; left: 50%; top: 50%; z-index: 999995; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+#de-bam-pass-popin-container .de-bam-pass-popin .close {background-color: #FFFFFF; position: absolute; right: 0px; top: 0px; border-radius: 50%; -webkit-appearance: none; width: 50px; height: 50px; box-shadow: #A7A7A7 0px 0px 5px 1px; -webkit-transform: translate(50%, -50%); transform: translate(50%, -50%);}
+#de-bam-pass-popin-container .de-bam-pass-popin .close::before,
+#de-bam-pass-popin-container .de-bam-pass-popin .close::after {content: ""; background-color: #919191; position: absolute; left: 50%; top: 50%; width: 24px; height: 3px; border-radius: 5px;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin .close::before {-webkit-transform: translateX(-50%) rotate(45deg); transform: translateX(-50%) rotate(45deg);}
+#de-bam-pass-popin-container .de-bam-pass-popin .close::after {-webkit-transform: translateX(-50%) rotate(-45deg); transform: translateX(-50%) rotate(-45deg);}
+
+#de-bam-pass-popin-container .de-bam-pass-popin .popin-content {padding: 40px 50px 40px 50px;}
+#de-bam-pass-popin-container .de-bam-pass-popin .popin-content .title {font-family: Hanken; font-size: 30px; line-height: 1.1em; font-weight: bold; text-align: center; color: #FF4D58;}
+
+/* Registration */
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content {display: -webkit-flex; display: flex; -webkit-justify-content: space-between; justify-content: space-between; -webkit-flex-wrap: wrap; flex-wrap: wrap; width: 700px; margin-top: 45px;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block {display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: space-between; justify-content: space-between; -webkit-align-items: center; align-items: center; position: relative; width: calc(50% - 20px);}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block::after {content: ""; background-color: #C0C0C0; position: absolute; right: -20px; top: 0px; width: 2px; height: 100%;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block:last-child::after {content: none;}
+
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .block-title {width: 100%; margin-bottom: 20px; font-family: Hanken; font-size: 24px; font-weight: bold; text-align: center; color: #000000;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .description {width: 100%; margin: 0 0 auto 0; font-family: Hanken; font-size: 14px; text-align: center; color: #000000;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .button-container {margin-top: 20px; text-align: center;}
+
+
+
+@media (max-width: 1360px)
+{
+	#page .site-header {-webkit-align-items: flex-start; align-items: flex-start; height: auto;}
+	#page .site-header .site-branding {margin-top: 20px;}
+	
+	#page .site-header .menu-wrapper.has--long-menu .primary-menu > ul,
+	#page .site-header .menu-wrapper.has--long-menu ul.primary-menu:not(.secondary-menu) {-webkit-flex-wrap: wrap; flex-wrap: wrap; width: 100%;}
+	
+	#page ul.primary-menu .menu-item-current-username > a {padding-left: initial !important;}
+}
+
+@media (max-width: 1069px)
+{
+	
+}
+
+@media (max-width: 1023px)
+{
+	/* Popins */
+	#de-bam-pass-popin-container .de-bam-pass-popin {width: calc(100% - 60px);}
+	
+	/* Registration */
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content {width: 100%; margin-top: 30px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block {display: block; width: 100%; margin-bottom: 30px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block:last-child {margin-bottom: 0px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block::after {content: none;}
+}
+
+@media (max-width: 900px)
+{
+	
+}
+
+@media (max-width: 767px)
+{
+	.de-bam-pass-button {padding: 4px 12px;}
+	
+	/* Popins */
+	#de-bam-pass-popin-container .de-bam-pass-popin {width: calc(100% - 40px);}
+	#de-bam-pass-popin-container .de-bam-pass-popin .close {width: 30px; height: 30px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin .close::before,
+	#de-bam-pass-popin-container .de-bam-pass-popin .close::after {width: 15px; height: 2px;}
+	
+	#de-bam-pass-popin-container .de-bam-pass-popin .popin-content {padding: 30px 10px 20px 10px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin .popin-content .title {font-size: 22px;}
+	
+	/* Registration */
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content {margin-top: 10px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block {margin-bottom: 15px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .block-title {margin-bottom: 10px; font-size: 18px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .description {font-size: 12px; line-height: 1.1em;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .button-container {margin-top: 10px;}
+}
+
+@media (max-width: 480px)
+{
+	
+}
