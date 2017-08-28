@@ -7,7 +7,7 @@
 
 
 
-#page ul.primary-menu .menu-item.save-code {background-color: #FF4D58; vertical-align: 6px; border-radius: 4px; height: auto; -webkit-transition: 0.1s background-color ease-out; transition: 0.1s background-color ease-out;}
+#page ul.primary-menu .menu-item.save-code {background-color: #FF4D58; vertical-align: 6px; border-radius: 4px; height: auto; margin-left: 5px; -webkit-transition: 0.1s background-color ease-out; transition: 0.1s background-color ease-out;}
 #page ul.primary-menu .menu-item.save-code:hover {background-color: #484848;}
 #page ul.primary-menu .menu-item.save-code > a {padding: 10px 20px; color: #FFFFFF;}
 
@@ -33,16 +33,24 @@
 #de-bam-pass-popin-container .de-bam-pass-popin .popin-content {padding: 40px 50px 40px 50px;}
 #de-bam-pass-popin-container .de-bam-pass-popin .popin-content .title {font-family: Hanken; font-size: 30px; line-height: 1.1em; font-weight: bold; text-align: center; color: #FF4D58;}
 
+#de-bam-pass-popin-container .de-bam-pass-popin .popin-content .content .button-container {margin-top: 20px; text-align: center;}
+
 /* Registration */
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content {display: -webkit-flex; display: flex; -webkit-justify-content: space-between; justify-content: space-between; -webkit-flex-wrap: wrap; flex-wrap: wrap; width: 700px; margin-top: 45px;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block {display: -webkit-flex; display: flex; -webkit-flex-direction: column; flex-direction: column; -webkit-justify-content: space-between; justify-content: space-between; -webkit-align-items: center; align-items: center; position: relative; width: calc(50% - 20px);}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block::after {content: ""; background-color: #C0C0C0; position: absolute; right: -20px; top: 0px; width: 2px; height: 100%;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block:last-child::after {content: none;}
 
-
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .block-title {width: 100%; margin-bottom: 20px; font-family: Hanken; font-size: 24px; font-weight: bold; text-align: center; color: #000000;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .description {width: 100%; margin: 0 0 auto 0; font-family: Hanken; font-size: 14px; text-align: center; color: #000000;}
-#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .button-container {margin-top: 20px; text-align: center;}
+
+/* Enter code */
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin {background-color: #F7F7F7; border-radius: 7px; width: 700px;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .close {background-color: #F7F7F7;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content {text-align: center;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content input.pass-code {display: inline-block; width: 300px; height: 45px; font-size: 20px; font-weight: bold;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content .description {margin-top: 15px; font-family: Hanken; font-size: 15px; line-height: 1.1em; font-weight: bold; color: #919191;}
 
 
 
@@ -98,9 +106,14 @@
 	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .block-title {margin-bottom: 10px; font-size: 18px;}
 	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .description {font-size: 12px; line-height: 1.1em;}
 	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-registration-popin .popin-content .content .block .button-container {margin-top: 10px;}
+	
+	/* Enter code */
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin {width: calc(100% - 40px);}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content input.pass-code {width: calc(100% - 50px); height: 38px;}
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content .description {font-size: 14px;}
 }
 
 @media (max-width: 480px)
 {
-	
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content input.pass-code {padding-left: 5px; padding-right: 5px; font-size: 14px;}
 }

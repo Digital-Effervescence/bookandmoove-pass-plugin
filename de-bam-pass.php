@@ -35,6 +35,7 @@ if (!class_exists('DEBamPass'))
 			
 			$this->loadTranslations();
 			
+			add_action('init', array($this, 'init'));
 			
 			add_action('wp_enqueue_scripts', array($this, 'loadStylesScripts'));
 			
@@ -44,23 +45,36 @@ if (!class_exists('DEBamPass'))
 			add_action('wp_ajax_loadRegistrationPopin', array($this, 'loadRegistrationPopin'));
 			add_action('wp_ajax_nopriv_loadRegistrationPopin', array($this, 'loadRegistrationPopin'));
 			
-			// add_filter('the_content', array($this, 'deBamPassHtmlContainer'));
+			// Ajax popin 'entrer code'
+			add_action('wp_ajax_enterCodePopin', array($this, 'enterCodePopin'));
+			add_action('wp_ajax_nopriv_enterCodePopin', array($this, 'enterCodePopin'));
+			
 			add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
 		}
 		
+		public function init()
+		{
+			// On a le paramètre indiquant que l'on est sur la page de login et que l'on souhaite afficher la popin permettant d'entrer le code après l'authentification
+			if (isset($_GET['de-bam']) && $_GET['de-bam'] == "lo") {
+				add_filter('login_redirect', array($this, 'loginRedirect'), 10, 3);
+			}
+		}
+		
+		// Ajout du container HTML du plugin à la page courante
 		public function deBamPassHtmlContainer($content)
 		{
 			$this->templates->get_template_part('popin', 'container');
-			
-			// echo "cheveux longs";
-			// $content .= wpautop('<div id="de-yo">yo</div>');
-			
-			// return $content;
 		}
 		
 		public function loadRegistrationPopin()
 		{
 			$this->templates->get_template_part('popin', 'registration');
+			die();
+		}
+		
+		public function enterCodePopin()
+		{
+			$this->templates->get_template_part('popin', 'enter-code');
 			die();
 		}
 		
@@ -79,6 +93,11 @@ if (!class_exists('DEBamPass'))
 			wp_enqueue_script('de_bam_script', plugin_dir_url(__FILE__) .'js/script.js', array('jquery'), '1.0', true);
 			wp_localize_script('de_bam_script', 'deBamPassPluginDirUrl', plugin_dir_url(__FILE__));
 			wp_localize_script('de_bam_script', 'ajax_object', array('ajaxurl' => admin_url('admin-ajax.php')));
+		}
+		
+		public function loginRedirect($redirect_to, $request, $user)
+		{
+			return home_url() ."?de-bam=ec";
 		}
 		
 		public function woocommerCheckoutForm($fields)

@@ -14,7 +14,7 @@
 				</p>
 				
 				<div class="button-container">
-					<a href="#TODO" class="de-bam-pass-button"><?php _e("Login", "debampass"); ?></a>
+					<a href="<?php echo wp_login_url(); ?>?de-bam=lo" class="de-bam-pass-button"><?php _e("Login", "debampass"); ?></a>
 				</div>
 			</div>
 			

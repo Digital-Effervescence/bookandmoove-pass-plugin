@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-08-18 09:44+0200\n"
-"PO-Revision-Date: 2017-08-18 09:45+0200\n"
+"POT-Creation-Date: 2017-08-28 09:47+0200\n"
+"PO-Revision-Date: 2017-08-28 10:08+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,23 +22,39 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:70
+#: de-bam-pass.php:89 templates/popin-enter-code.php:5
 msgid "Activate my BookandMoove code"
 msgstr "Activer mon code BookandMoove"
 
-#: de-bam-pass.php:71
+#: de-bam-pass.php:90
 msgid "Enter your card code"
 msgstr "Saisissez le code de votre carte"
 
-#: templates/popin-registration.php:8
+#: templates/popin-enter-code.php:9
+msgid "Enter the code of your card"
+msgstr "Saisissez le code de votre carte"
+
+#: templates/popin-enter-code.php:12
+msgid ""
+"Enter your code number printed on the back of your BookandMoove card. This "
+"code must be 9 digits long."
+msgstr ""
+"Saisissez votre de numéro de code imprimé au dos de votre carte "
+"BookandMoove. Ce code doit comporter 9 chiffres."
+
+#: templates/popin-enter-code.php:16
+msgid "Validate my code"
+msgstr "Valider mon code"
+
+#: templates/popin-registration.php:5
 msgid "I activate my BookandMoove code"
 msgstr "J'active mon code BookandMoove"
 
-#: templates/popin-registration.php:12
+#: templates/popin-registration.php:9
 msgid "Already customer"
 msgstr "Déjà client"
 
-#: templates/popin-registration.php:15
+#: templates/popin-registration.php:12
 msgid ""
 "You already have a customer account and want to activate a new BookandMoove "
 "code."
@@ -46,26 +62,26 @@ msgstr ""
 "Vous avez déjà un compte client et vous voulez activer un nouveau code "
 "BookandMoove."
 
-#: templates/popin-registration.php:16
+#: templates/popin-registration.php:13
 msgid "You must first log in."
 msgstr "Vous devez d’abord vous connecter."
 
-#: templates/popin-registration.php:20
+#: templates/popin-registration.php:17
 msgid "Login"
 msgstr "Se connecter"
 
-#: templates/popin-registration.php:25
+#: templates/popin-registration.php:22
 msgid "New customer"
 msgstr "Nouveau client"
 
-#: templates/popin-registration.php:28
+#: templates/popin-registration.php:25
 msgid "You have not yet created a BookandMoove account."
 msgstr "Vous n’avez pas encore créé de compte BookandMoove."
 
-#: templates/popin-registration.php:29
+#: templates/popin-registration.php:26
 msgid "You must first create one to activate your code."
 msgstr "Vous devez d’abord en créer un pour activer votre code."
 
-#: templates/popin-registration.php:33
+#: templates/popin-registration.php:30
 msgid "Create an acount"
 msgstr "Créer un compte"
