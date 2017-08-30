@@ -39,6 +39,7 @@ if (!class_exists('DEBamPass'))
 			$this->loadTranslations();
 			
 			add_action('init', array($this, 'init'));
+			// add_action('wp_loaded', array($this, 'wpLoaded')); // TMP
 			
 			add_action('wp_enqueue_scripts', array($this, 'loadStylesScripts'));
 			
@@ -53,9 +54,13 @@ if (!class_exists('DEBamPass'))
 			add_action('wp_ajax_enterCodePopin', array($this, 'enterCodePopin'));
 			add_action('wp_ajax_nopriv_enterCodePopin', array($this, 'enterCodePopin'));
 			
-			// Ajax popin 'form entrer code'
-			// add_action('wp_ajax_formEnterCodePopin', array($this, 'formEnterCodePopin'));
-			// add_action('wp_ajax_nopriv_formEnterCodePopin', array($this, 'formEnterCodePopin'));
+			// Ajax validation popin 'entrer code'
+			add_action('wp_ajax_enterCodeValidation', array($this, 'enterCodeValidation'));
+			add_action('wp_ajax_nopriv_enterCodeValidation', array($this, 'enterCodeValidation'));
+			
+			// Ajax popin 'form registration'
+			add_action('wp_ajax_formRegistrationPopin', array($this, 'formRegistrationPopin'));
+			add_action('wp_ajax_nopriv_formRegistrationPopin', array($this, 'formRegistrationPopin'));
 			
 			
 			add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
@@ -94,6 +99,24 @@ if (!class_exists('DEBamPass'))
 			}
 		}
 		
+		public function wpLoaded()
+		{
+			global $woocommerce;
+			
+			$woocommerce->cart->empty_cart(); // On vide le panier de l'utilisateur
+			
+			$meta = get_post_meta(12166, '_product_ids');
+			
+			// $membershipPlan = wc_memberships_get_membership_plan(12166);
+			// $membershipPlan = wc_memberships_get_membership_plans();
+			echo "<pre>";
+			print_r($meta);
+			echo "</pre>";
+			
+			// $woocommerce->cart->add_to_cart(12566);
+			// echo "yo123";
+		}
+		
 		// Ajout du container HTML du plugin à la page courante
 		public function deBamPassHtmlContainer($content)
 		{
@@ -112,14 +135,120 @@ if (!class_exists('DEBamPass'))
 			die();
 		}
 		
-		// Chargement de la popin avec le formulaire d'inscription
-		public function formEnterCodePopin()
+		// Méthode appelée en ajax, lorsque l'on entre son code pour son pass
+		public function enterCodeValidation()
 		{
-			// add_action('woocommerce_checkout_fields', array($this, 'woocommerCheckoutForm'));
+			global $wpdb;
 			
-			$this->templates->get_template_part('popin', 'form-enter-code');
-			// add_action('woocommerce_checkout_fields', array($this, 'woocommerCheckoutForm'));
-			die();
+			if (isset($_POST['enter-code-pass-code'])) {
+				// $tableName = $wpdb->prefix ."debampass";
+				
+				$queryGetPass = "";
+				$queryGetPass .= "SELECT id ";
+				$queryGetPass .= "FROM $tableName ";
+				$queryGetPass .= "WHERE user_id IS NULL ";
+				$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
+				$queryGetPass .= "AND code = %d";
+				
+				$result = $wpdb->query($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['enter-code-pass-code']));
+				
+				$isOk = 0;
+				$message = __("The entered code is incorrect", "debampass");
+				if ($result == 1) { // On a 1 pass non activé
+					$isOk = 1;
+					$message = "";
+				}
+				
+				echo json_encode(
+					array(
+						'status' => 'success',
+						'passExists' => $isOk,
+						'message' => $message,
+						'loggued' => is_user_logged_in(),
+					)
+				);
+			} else {
+				echo json_encode(
+					array(
+						'status' => 'success',
+						'message' => __("An error has occurred", "debampass"),
+						'log' => "Manque la variable POST contenant le code.",
+					)
+				);
+			}
+			
+			exit;
+		}
+		
+		private function getCodePassEntryQuery()
+		{
+			global $wpdb;
+			
+			$tableName = $wpdb->prefix ."debampass";
+			
+			$queryGetPass = "";
+			$queryGetPass .= "SELECT id, membership_plan, user_id, code, date_end_code_active, created_at, updated_at ";
+			$queryGetPass .= "FROM $tableName ";
+			$queryGetPass .= "WHERE user_id IS NULL ";
+			$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
+			$queryGetPass .= "AND code = %d";
+			
+			return $queryGetPass;
+		}
+		
+		// Chargement de la popin avec le formulaire d'inscription
+		public function formRegistrationPopin()
+		{
+			global $woocommerce;
+			global $wpdb;
+			
+			
+			$resultPass = $wpdb->get_results($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['code-pass'])); // On récupère l'entrée en BDD du pass dont le code est passé en POST
+			// $resultPass = $wpdb->get_results($wpdb->prepare($this->getCodePassEntryQuery(), "123654987")); // On récupère l'entrée en BDD du pass dont le code est passé en POST
+			// echo "<pre>";
+			// print_r($resultPass);
+			// echo "</pre>";
+			// exit;
+			if (count($resultPass) == 1) {
+				$woocommerce->cart->empty_cart(); // On vide le panier de l'utilisateur
+				
+				$metaMembershipPlan = get_post_meta($resultPass[0]->membership_plan, '_product_ids');
+				// $woocommerce->cart->add_to_cart(12566);
+				
+				if (isset($metaMembershipPlan[0]) && isset($metaMembershipPlan[0][0])) {
+					$woocommerce->cart->add_to_cart($metaMembershipPlan[0][0]);
+					
+					echo json_encode(
+						array(
+							'status' => 'success',
+							'data' => $this->templates->get_template_part('popin', 'form-enter-code', true, true),
+						)
+					);
+				} else {
+					echo json_encode(
+						array(
+							'status' => 'error',
+							'message' => __("An error has occurred", "debampass"),
+							'log' => "Pas de produit trouvé dans les metas du membership plan.",
+						)
+					);
+				}
+				
+				exit;
+			} else {
+				echo json_encode(
+					array(
+						'status' => 'error',
+						'message' => __("An error has occurred", "debampass"),
+						'log' => "Aucun ou plus de 1 résultat.",
+					)
+				);
+				exit;
+			}
+			
+			// echo "<pre>";
+			// print_r($resultPass);
+			// echo "</pre>";
 		}
 		
 		private function loadTranslations()

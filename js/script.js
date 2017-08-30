@@ -3,14 +3,16 @@
 		initDEBamPass();
 	});
 	
+	
+	var popinLoading = false;
+	var deBamPassCode = "";
+	
 
 	function initDEBamPass()
 	{
-		var popinLoading = false;
-		
 		// Clics sur 'Enregistrer mon code' -> ouverture de la popin de connexion/inscription
 		$("#page ul.primary-menu").on("click", ".menu-item.save-code", function () {
-			if (!popinLoading) {
+			/*if (!popinLoading) {
 				popinLoading = true;
 				showLoader();
 				
@@ -33,13 +35,24 @@
 						hideLoader();
 					}
 				});
-			}
+			}*/
+			
+			displayActivationPassPopin();
 		});
 		
+		// On récupère les éventuels paramètre dans l'url
 		var deBamParam = getVar("de-bam");
+		var deBamCode = getVar("code");
+		
+		// On veut afficher la popin d'inscription (commande)
+		if (deBamParam && deBamParam == "ec" && deBamCode) {
+			deBamPassCode = deBamCode;
+			
+			displayRegistrationPopin();
+		}
 		
 		// On veut afficher la popin permettant d'activer son pass
-		if (deBamParam && deBamParam == "ec") {
+		/*if (deBamParam && deBamParam == "ec") {
 			popinLoading = true;
 			showLoader();
 			
@@ -47,10 +60,151 @@
 				url: ajax_object.ajaxurl,
 				data: {action: "enterCodePopin"},
 				type: "POST",
+				success: function (dataPopin) {
+					$("#de-bam-pass-popin-container").append(dataPopin);
+					
+					closePopinManager();
+					
+					// Validation du formulaire de saisie d'un code
+					$("#de-bam-pass-popin-container").submit("#enter-code-form", function (event) {
+						event.preventDefault();
+						$("#de-bam-pass-enter-code-popin .errors").text("").removeClass("open");
+						
+						deBamPassCode = $("[name='enter-code-pass-code']").val();
+						
+						showLoaderAbove();
+						
+						$.ajax({
+							url: ajax_object.ajaxurl,
+							data: {action: "enterCodeValidation", 'enter-code-pass-code': deBamPassCode},
+							type: "POST",
+							dataType: "json",
+							success: function (data) {
+								console.log(data);
+								if (data.status == "success") {
+									if (data.passExists == 1) { // Le code du pass est bon, on passe à la suite
+										if (data.loggued) { // Si l'utilisateur est loggué -> on affiche le formulaire
+											console.log("if");
+										} else { // Si l'utilisateur n'est pas loggué -> On affiche la popin permettant de se logguer ou de s'inscrire
+											displayLoginRegistrationPopin();
+										}
+									} else { // Le code n'existe pas, est déjà pris ou n'est pas actif
+										enterCodeValidationShowMessage(data.message);
+									}
+								} else {
+									enterCodeValidationShowMessage(data.message);
+									console.log(data.log);
+								}
+							},
+							error: function (qXHR, textStatus, errorThrown) {
+								console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+							},
+							complete: function (dataCheckout) {
+								hideLoaderAbove();
+							}
+						});
+					});
+				},
+				error: function (qXHR, textStatus, errorThrown) {
+					console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+				},
+				complete: function () {
+					popinLoading = false;
+					hideLoader();
+				}
+			});
+		}*/
+	}
+	
+	function displayActivationPassPopin()
+	{
+		popinLoading = true;
+		showLoader();
+		
+		$.ajax({
+			url: ajax_object.ajaxurl,
+			data: {action: "enterCodePopin"},
+			type: "POST",
+			success: function (dataPopin) {
+				$("#de-bam-pass-popin-container").append(dataPopin);
+				
+				closePopinManager();
+				
+				// Validation du formulaire de saisie d'un code
+				$("#de-bam-pass-popin-container").submit("#enter-code-form", function (event) {
+					event.preventDefault();
+					$("#de-bam-pass-enter-code-popin .errors").text("").removeClass("open");
+					
+					deBamPassCode = $("[name='enter-code-pass-code']").val();
+					
+					showLoaderAbove();
+					
+					$.ajax({
+						url: ajax_object.ajaxurl,
+						data: {action: "enterCodeValidation", 'enter-code-pass-code': deBamPassCode},
+						type: "POST",
+						dataType: "json",
+						success: function (data) {
+							// console.log(data);
+							if (data.status == "success") {
+								if (data.passExists == 1) { // Le code du pass est bon, on passe à la suite
+									if (data.loggued) { // Si l'utilisateur est loggué -> on affiche le formulaire
+										displayRegistrationPopin();
+									} else { // Si l'utilisateur n'est pas loggué -> On affiche la popin permettant de se logguer ou de s'inscrire
+										displayLoginRegistrationPopin();
+									}
+								} else { // Le code n'existe pas, est déjà pris ou n'est pas actif
+									enterCodeValidationShowMessage(data.message);
+									hideLoaderAbove();
+								}
+							} else {
+								enterCodeValidationShowMessage(data.message);
+								console.log(data.log);
+								
+								hideLoaderAbove();
+							}
+						},
+						error: function (qXHR, textStatus, errorThrown) {
+							console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+						},
+						complete: function (dataCheckout) {
+							// hideLoaderAbove();
+						}
+					});
+				});
+			},
+			error: function (qXHR, textStatus, errorThrown) {
+				console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+			},
+			complete: function () {
+				popinLoading = false;
+				hideLoader();
+			}
+		});
+	}
+	
+	function displayLoginRegistrationPopin()
+	{
+		if (!popinLoading) {
+			popinLoading = true;
+			
+			$("#de-bam-pass-popin-container .de-bam-pass-popin").remove();
+			showLoader();
+			
+			$.ajax({
+				url: ajax_object.ajaxurl,
+				data: {action: "loadRegistrationPopin"},
+				type: "POST",
 				success: function (data) {
 					$("#de-bam-pass-popin-container").append(data);
 					
 					closePopinManager();
+					
+					loginManager();
+					
+					$("#de-bam-pass-registration-popin .register").on("click", ".button-register", function () {
+						displayRegistrationPopin();
+					});
 				},
 				error: function (qXHR, textStatus, errorThrown) {
 					console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
@@ -63,6 +217,68 @@
 		}
 	}
 	
+	function displayRegistrationPopin()
+	{
+		if (!popinLoading) {
+			popinLoading = true;
+			
+			$("#de-bam-pass-popin-container .de-bam-pass-popin").remove();
+			showLoader();
+			
+			// Chargement de la popin
+			$.ajax({
+				url: ajax_object.ajaxurl,
+				data: {action: "formRegistrationPopin", 'code-pass': deBamPassCode},
+				type: "POST",
+				dataType: "json",
+				success: function (dataPopin) {
+					if (dataPopin.status == "success") { // OK
+						// Chargement du contenu du formulaire
+						$.ajax({
+							url: checkoutUrl,
+							type: "POST",
+							success: function (dataCheckout) {
+								$("#de-bam-pass-popin-container").append(dataPopin.data);
+								$("#de-bam-pass-popin-container .content").append($(dataCheckout).find("#entry-content-anchor").html());
+								
+								closePopinManager();
+							},
+							error: function (qXHR, textStatus, errorThrown) {
+								console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+							},
+							complete: function (dataCheckout) {
+								popinLoading = false;
+								hideLoader();
+								hideLoaderAbove();
+							}
+						});
+					} else { // Erreur
+						alert(dataPopin.message);
+						console.log(dataPopin.log);
+						
+						popinLoading = false;
+						hideLoader();
+						hideLoaderAbove();
+						
+						$("#de-bam-pass-popin-container").removeClass("open");
+					}
+				},
+				error: function (qXHR, textStatus, errorThrown) {
+					console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+					
+					popinLoading = false;
+					hideLoader();
+					hideLoaderAbove();
+				}
+			});
+		}
+	}
+	
+	function enterCodeValidationShowMessage(message)
+	{
+		$("#de-bam-pass-enter-code-popin .errors").text(message).addClass("open");
+	}
+	
 	function showLoader()
 	{
 		$("#de-bam-pass-popin-container").addClass("open").find(".de-bam-pass-overlay, .de-bam-pass-loader").addClass("open");
@@ -71,6 +287,16 @@
 	function hideLoader()
 	{
 		$("#de-bam-pass-popin-container").find(".de-bam-pass-loader").removeClass("open");
+	}
+	
+	function showLoaderAbove()
+	{
+		$("#de-bam-pass-popin-container").find(".de-bam-pass-overlay-above, .de-bam-pass-loader").addClass("open");
+	}
+	
+	function hideLoaderAbove()
+	{
+		$("#de-bam-pass-popin-container").find(".de-bam-pass-overlay-above, .de-bam-pass-loader").removeClass("open");
 	}
 	
 	function closePopinManager()
@@ -100,44 +326,24 @@
 				$(".lwa .lwa-links-modal").trigger("click"); // On ouvre la popin avec le formulaire de connexion
 				
 				// On veut ajouter un paramètre dans le formulaire de connexion pour rediriger l'utilisateur lorsqu'il se connecte
-				$(".lwa-modal .lwa-submit-wrapper").append('<input type="hidden" name="redirect_to" value="'+ urlAddParameter(document.location, 'de-bam', 'ec') +'" />');
+				var url = urlAddParameter(document.location.href, 'de-bam', 'ec');
+				url = urlAddParameter(url, 'code', deBamPassCode);
+				$(".lwa-modal .lwa-submit-wrapper").append('<input type="hidden" name="redirect_to" value="'+ url +'" />');
 			}
 		});
 	}
 	
 	
 	
-	function urlAddParameter(url, key, value)
+	function urlAddParameter(uri, key, value)
 	{
-		key = encodeURI(key);
-		value = encodeURI(value);
-
-		// var kvp = document.location.search.substr(1).split('&');
-		var kvp = url.search.substr(1).split('&');
-
-		var i = kvp.length;
-		var x;
-		while (i--) {
-			x = kvp[i].split('=');
-			
-			if (x[0] == key) {
-				x[1] = value;
-				kvp[i] = x.join('=');
-				break;
-			}
+		var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+		var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+		if (uri.match(re)) {
+			return uri.replace(re, '$1' + key + "=" + value + '$2');
+		} else {
+			return uri + separator + key + "=" + value;
 		}
-
-		if (i < 0) {
-			kvp[kvp.length] = [key,value].join('=');
-		}
-		
-		// console.log(kvp);
-		// console.log(kvp.join('&'));
-		
-		//this will reload the page, it's likely better to store this until finished
-		// document.location.search = kvp.join('&');
-		
-		return url.origin + url.pathname +"?"+ kvp.join('&');
 	}
 	
 	function getVar(nomVariable)

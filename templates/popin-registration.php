@@ -27,7 +27,7 @@
 				</p>
 				
 				<div class="button-container">
-					<a href="#TODO" class="de-bam-pass-button empty"><?php _e("Create an acount", "debampass"); ?></a>
+					<button class="button-register de-bam-pass-button empty"><?php _e("Create an acount", "debampass"); ?></button>
 				</div>
 			</div>
 		</div>

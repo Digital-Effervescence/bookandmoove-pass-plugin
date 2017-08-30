@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-08-28 09:47+0200\n"
-"PO-Revision-Date: 2017-08-28 10:08+0200\n"
+"POT-Creation-Date: 2017-08-29 14:33+0200\n"
+"PO-Revision-Date: 2017-08-29 14:34+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,11 +22,20 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:89 templates/popin-enter-code.php:5
+#: de-bam-pass.php:137
+msgid "The entered code is incorrect"
+msgstr "Le code entré est incorrect"
+
+#: de-bam-pass.php:151
+msgid "An error has occurred"
+msgstr "Une erreur est survenue"
+
+#: de-bam-pass.php:201 templates/popin-enter-code.php:5
+#: templates/popin-form-enter-code.php:5
 msgid "Activate my BookandMoove code"
 msgstr "Activer mon code BookandMoove"
 
-#: de-bam-pass.php:90
+#: de-bam-pass.php:202
 msgid "Enter your card code"
 msgstr "Saisissez le code de votre carte"
 

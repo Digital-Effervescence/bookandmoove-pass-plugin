@@ -107,7 +107,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * @return string
 		 */
-		public function get_template_part( $slug, $name = null, $load = true ) {
+		public function get_template_part( $slug, $name = null, $load = true, $returnContent = false ) {
 			// Execute code for this part.
 			do_action( 'get_template_part_' . $slug, $slug, $name );
 			do_action( $this->filter_prefix . '_get_template_part_' . $slug, $slug, $name );
@@ -116,7 +116,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 			$templates = $this->get_template_file_names( $slug, $name );
 
 			// Return the part that is found.
-			return $this->locate_template( $templates, $load, false );
+			return $this->locate_template( $templates, $load, false, $returnContent );
 		}
 
 		/**
@@ -221,7 +221,7 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 		 *
 		 * @return string The template filename if one is located.
 		 */
-		public function locate_template( $template_names, $load = false, $require_once = true ) {
+		public function locate_template( $template_names, $load = false, $require_once = true, $returnContent = false ) {
 
 			// Use $template_names as a cache key - either first element of array or the variable itself if it's a string
 			$cache_key = is_array( $template_names ) ? $template_names[0] : $template_names;
@@ -256,7 +256,15 @@ if ( ! class_exists( 'Gamajo_Template_Loader' ) ) {
 			}
 
 			if ( $load && $located ) {
-				load_template( $located, $require_once );
+				if ($returnContent) {
+					ob_start();
+					load_template( $located, $require_once );
+					$lastNewsSidebar = ob_get_contents();
+					$located = ob_get_contents();
+					ob_end_clean();
+				} else {
+					load_template( $located, $require_once );
+				}
 			}
 
 			return $located;
