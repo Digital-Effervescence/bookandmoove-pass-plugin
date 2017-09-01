@@ -92,13 +92,13 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$charsetCollate = $wpdb->get_charset_collate();
 				
 				$sql = "CREATE TABLE $tableName (
-				  id bigint(20) NOT NULL AUTO_INCREMENT,
-				  membership_plan bigint(20) NOT NULL,
-				  user_id bigint(20),
-				  code int(11) NOT NULL,
-				  date_end_code_active datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-				  created_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-				  updated_at datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
+				  id BIGINT(20) NOT NULL AUTO_INCREMENT,
+				  membership_plan BIGINT(20) NOT NULL,
+				  user_id BIGINT(20),
+				  code VARCHAR(9) NOT NULL,
+				  date_end_code_active DATETIME NOT NULL,
+				  created_at DATETIME NOT NULL,
+				  updated_at DATETIME,
 				  PRIMARY KEY  (id)
 				) $charsetCollate;";
 
@@ -188,7 +188,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$queryGetPass .= "FROM $tableName ";
 					$queryGetPass .= "WHERE user_id IS NULL ";
 					$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
-					$queryGetPass .= "AND code = %d";
+					$queryGetPass .= "AND code = %s";
 					
 					$result = $wpdb->query($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['enter-code-pass-code']));
 					
@@ -231,7 +231,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$queryGetPass .= "FROM $tableName ";
 				$queryGetPass .= "WHERE user_id IS NULL ";
 				$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
-				$queryGetPass .= "AND code = %d";
+				$queryGetPass .= "AND code = %s";
 				
 				return $queryGetPass;
 			}
@@ -246,7 +246,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$queryGetPass .= "SELECT id, membership_plan, user_id, code, date_end_code_active, created_at, updated_at ";
 				$queryGetPass .= "FROM $tableName ";
 				$queryGetPass .= "WHERE user_id IS NOT NULL ";
-				$queryGetPass .= "AND code = %d";
+				$queryGetPass .= "AND code = %s";
 				
 				return $queryGetPass;
 			}
@@ -387,7 +387,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						$queryActivatePass .= "updated_at = NOW() ";
 						$queryActivatePass .= "WHERE user_id IS NULL ";
 						$queryActivatePass .= "AND date_end_code_active >= DATE(NOW()) ";
-						$queryActivatePass .= "AND code = %d";
+						$queryActivatePass .= "AND code = %s";
 						
 						$resultUpdatePass = $wpdb->query($wpdb->prepare($queryActivatePass, get_current_user_id(), $_POST['deBamPassCode']));
 						
