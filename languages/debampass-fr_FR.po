@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-08-29 14:33+0200\n"
-"PO-Revision-Date: 2017-08-29 14:34+0200\n"
+"POT-Creation-Date: 2017-09-01 13:34+0200\n"
+"PO-Revision-Date: 2017-09-01 13:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,20 +22,33 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:137
+#: de-bam-pass.php:196
 msgid "The entered code is incorrect"
 msgstr "Le code entré est incorrect"
 
-#: de-bam-pass.php:151
+#: de-bam-pass.php:214 de-bam-pass.php:292 de-bam-pass.php:303
+#: de-bam-pass.php:341 de-bam-pass.php:350 de-bam-pass.php:393
+#: de-bam-pass.php:413 de-bam-pass.php:423 de-bam-pass.php:432
 msgid "An error has occurred"
 msgstr "Une erreur est survenue"
 
-#: de-bam-pass.php:201 templates/popin-enter-code.php:5
-#: templates/popin-form-enter-code.php:5
+#: de-bam-pass.php:372
+msgid "Pass activated"
+msgstr "Pass activé"
+
+#: de-bam-pass.php:388
+msgid "Pass activation error"
+msgstr "Erreur lors de l'activation du pass"
+
+#: de-bam-pass.php:468
+msgid "Activate my code"
+msgstr "Activer mon code"
+
+#: de-bam-pass.php:485 templates/popin-enter-code.php:5
 msgid "Activate my BookandMoove code"
 msgstr "Activer mon code BookandMoove"
 
-#: de-bam-pass.php:202
+#: de-bam-pass.php:486
 msgid "Enter your card code"
 msgstr "Saisissez le code de votre carte"
 
@@ -43,7 +56,7 @@ msgstr "Saisissez le code de votre carte"
 msgid "Enter the code of your card"
 msgstr "Saisissez le code de votre carte"
 
-#: templates/popin-enter-code.php:12
+#: templates/popin-enter-code.php:13
 msgid ""
 "Enter your code number printed on the back of your BookandMoove card. This "
 "code must be 9 digits long."
@@ -51,9 +64,25 @@ msgstr ""
 "Saisissez votre de numéro de code imprimé au dos de votre carte "
 "BookandMoove. Ce code doit comporter 9 chiffres."
 
-#: templates/popin-enter-code.php:16
+#: templates/popin-enter-code.php:17
 msgid "Validate my code"
 msgstr "Valider mon code"
+
+#: templates/popin-form-registration.php:5
+msgid "My information"
+msgstr "Mes informations"
+
+#: templates/popin-message-validation-pass.php:5
+msgid "BookandMoove pass activated successfully"
+msgstr "Pass BookandMoove activé avec succès"
+
+#: templates/popin-message-validation-pass.php:9
+msgid ""
+"Congratulations! Your pass ###membership_plan_name### has been successfully "
+"activated."
+msgstr ""
+"Félicitations ! Votre passe ###membership_plan_name### a été activé avec "
+"succès."
 
 #: templates/popin-registration.php:5
 msgid "I activate my BookandMoove code"

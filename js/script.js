@@ -7,9 +7,13 @@
 	var popinLoading = false;
 	var deBamPassCode = "";
 	
+	var htmlOverflow;
+	
 
 	function initDEBamPass()
 	{
+		htmlOverflow = $("html").css("overflow");
+		
 		// Clics sur 'Enregistrer mon code' -> ouverture de la popin de connexion/inscription
 		$("#page ul.primary-menu").on("click", ".menu-item.save-code", function () {
 			/*if (!popinLoading) {
@@ -121,6 +125,7 @@
 		popinLoading = true;
 		showLoader();
 		
+		// On veut afficher la popin de saisie du code
 		$.ajax({
 			url: ajax_object.ajaxurl,
 			data: {action: "enterCodePopin"},
@@ -131,7 +136,7 @@
 				closePopinManager();
 				
 				// Validation du formulaire de saisie d'un code
-				$("#de-bam-pass-popin-container").submit("#enter-code-form", function (event) {
+				$("#de-bam-pass-popin-container").on("submit", "#enter-code-form", function (event) {
 					event.preventDefault();
 					$("#de-bam-pass-enter-code-popin .errors").text("").removeClass("open");
 					
@@ -152,6 +157,8 @@
 										displayRegistrationPopin();
 									} else { // Si l'utilisateur n'est pas loggué -> On affiche la popin permettant de se logguer ou de s'inscrire
 										displayLoginRegistrationPopin();
+										
+										hideLoaderAbove();
 									}
 								} else { // Le code n'existe pas, est déjà pris ou n'est pas actif
 									enterCodeValidationShowMessage(data.message);
@@ -241,7 +248,13 @@
 								$("#de-bam-pass-popin-container").append(dataPopin.data);
 								$("#de-bam-pass-popin-container .content").append($(dataCheckout).find("#entry-content-anchor").html());
 								
+								$("[name='woocommerce_checkout_place_order']").attr("value", checkoutButtonLabel);
+								$("#order_review .checkout__billing .place-order").append('<input type="hidden" name="action" value="validateCheckoutForm" />'); // Pour le POST['action'] de l'ajax de validation du formulaire
+								$("#order_review .checkout__billing .place-order").append('<input type="hidden" name="debampass-code" value="'+ deBamPassCode +'" />'); // Contient le code du pass pour être envoyé à l'ajax de validation du formulaire
+								
 								closePopinManager();
+								
+								checkoutManager();
 							},
 							error: function (qXHR, textStatus, errorThrown) {
 								console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
@@ -260,7 +273,8 @@
 						hideLoader();
 						hideLoaderAbove();
 						
-						$("#de-bam-pass-popin-container").removeClass("open");
+						// hideDeBamPassContainer();
+						closePopin();
 					}
 				},
 				error: function (qXHR, textStatus, errorThrown) {
@@ -274,6 +288,129 @@
 		}
 	}
 	
+	function checkoutManager()
+	{
+		// On valide le formulaire de commande
+		$("#de-bam-pass-form-popin").on("submit", "form#order_review", function (event) {
+			event.preventDefault();
+			
+			var formSerialized = $(this).serialize();
+			
+			showLoaderAbove();
+			
+			$.ajax({
+				url: ajax_object.ajaxurl,
+				data: formSerialized,
+				type: "POST",
+				dataType: "json",
+				success: function (data) {
+					// console.log(data);
+					
+					if (data.result == "success") { // OK
+						// On veut finaliser la commande
+						finalizeOrder(data.redirect);
+					} else if (data.result == "failure") { // Erreur de validation
+						// Si on n'a pas le container des messages d'erreurs de créé
+						if ($("#de-bam-pass-form-popin form#order_review .form-errors-container").length == 0) {
+							$("#de-bam-pass-form-popin form#order_review").prepend('<div class="form-errors-container"></div>');
+						}
+						
+						$("#de-bam-pass-form-popin form#order_review .form-errors-container").html(data.messages);
+						
+						hideLoaderAbove();
+					} else { // Autre erreur
+						alert(data.message);
+						console.log(data.log);
+						
+						hideLoaderAbove();
+					}
+				},
+				error: function (qXHR, textStatus, errorThrown) {
+					console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+					
+					hideLoaderAbove();
+				},
+				complete: function (dataCheckout) {
+					// hideLoaderAbove();
+				}
+			});
+		});
+	}
+	
+	function finalizeOrder(url)
+	{
+		// On récupère l'ID de la commande dans l'url (un peu de la bidouille, mais bon...)
+		var urlSplited = url.split('?');
+		var urlSplitedSlash = urlSplited[0].split('/');
+		var idOrder = urlSplitedSlash[urlSplitedSlash.length - 1];
+		
+		// On veut finaliser la commande
+		$.ajax({
+			url: ajax_object.ajaxurl,
+			data: {'action': 'finalizeOrder', 'idOrder': idOrder, 'deBamPassCode': deBamPassCode},
+			type: "POST",
+			dataType: "json",
+			success: function (data) {
+				// console.log(data);
+				
+				if (data.status == "success") {
+					popinMessageValidationPassManager(data.membershipPlan);
+				} else {
+					alert(data.message);
+					console.log(data.log);
+					
+					hideLoaderAbove();
+				}
+			},
+			error: function (qXHR, textStatus, errorThrown) {
+				console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+				
+				hideLoaderAbove();
+			},
+			complete: function (dataCheckout) {
+				// hideLoaderAbove();
+			}
+		});
+	}
+	
+	// Affiche la popin avec le message de validation de l'activation du pass
+	function popinMessageValidationPassManager(membershipPlan)
+	{
+		popinLoading = true;
+		showLoader();
+		
+		$.ajax({
+			url: ajax_object.ajaxurl,
+			data: {action: "messageValidationPass"},
+			type: "POST",
+			success: function (dataPopin) {
+				hideLoaderAbove();
+				$("#de-bam-pass-popin-container .de-bam-pass-popin").remove();
+				
+				dataPopin = dataPopin.replace("###membership_plan_name###", "'"+ membershipPlan.name +"'");
+				$("#de-bam-pass-popin-container").append(dataPopin);
+				
+				// On recharge la page à la fermeture de la popin
+				$("#de-bam-pass-message-validation-pass-popin").one("click", ".close", function () {
+					var urlSplited = document.location.href.split('?');
+					document.location.href = urlSplited[0]; // Sans les éventuels paramètres de l'url
+				});
+			},
+			error: function (qXHR, textStatus, errorThrown) {
+				console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
+				
+				popinLoading = false;
+				hideLoaderAbove();
+				closePopin();
+			},
+			complete: function () {
+				popinLoading = false;
+				hideLoaderAbove();
+				// closePopin();
+			}
+		});
+	}
+	
 	function enterCodeValidationShowMessage(message)
 	{
 		$("#de-bam-pass-enter-code-popin .errors").text(message).addClass("open");
@@ -282,7 +419,14 @@
 	function showLoader()
 	{
 		$("#de-bam-pass-popin-container").addClass("open").find(".de-bam-pass-overlay, .de-bam-pass-loader").addClass("open");
+		$("html").css({"overflow": "hidden"});
 	}
+	
+	// function hideDeBamPassContainer()
+	// {
+		// $("#de-bam-pass-popin-container").removeClass("open");
+		// $("html").css({"overflow": htmlOverflow});
+	// }
 	
 	function hideLoader()
 	{
@@ -308,7 +452,14 @@
 	
 	function closePopin($popin)
 	{
-		$popin.remove();
+		if (typeof $popin == "undefined") {
+			$("#de-bam-pass-popin-container .de-bam-pass-popin").remove();
+		} else {
+			$popin.remove();
+		}
+		
+		// hideLoaderAbove();
+		$("html").css({"overflow": htmlOverflow});
 		
 		$("#de-bam-pass-popin-container").removeClass("open").find(".de-bam-pass-overlay, .de-bam-pass-loader").removeClass("open");
 	}

@@ -1,8 +1,8 @@
-<div id="de-bam-form-popin" class="de-bam-pass-popin">
+<div id="de-bam-pass-form-popin" class="de-bam-pass-popin">
 	<?php include("elements/close.php"); ?>
 	
 	<div class="popin-content">
-		<p class="title"><?php _e("Activate my BookandMoove code", "debampass"); ?></p>
+		<p class="title"><?php _e("My information", "debampass"); ?></p>
 		
 		<div class="content">
 			

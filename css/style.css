@@ -16,11 +16,12 @@
 
 
 /* Popins */
-#de-bam-pass-popin-container {display: none; position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; hyphens: manual; z-index: 999990;}
+#de-bam-pass-popin-container {display: none; position: fixed; overflow: auto; left: 0px; top: 0px; width: 100%; height: 100%; text-align: center; hyphens: manual; z-index: 999990;}
+#de-bam-pass-popin-container::before {content: ""; display: inline-block; vertical-align: middle; height: 100%;}
 #de-bam-pass-popin-container.open {display: block;}
 
 #de-bam-pass-popin-container .de-bam-pass-overlay,
-#de-bam-pass-popin-container .de-bam-pass-overlay-above {display: none; background-color: rgba(0, 0, 0, 0.7); position: absolute; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999991;}
+#de-bam-pass-popin-container .de-bam-pass-overlay-above {display: none; background-color: rgba(0, 0, 0, 0.7); position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 999991;}
 
 #de-bam-pass-popin-container .de-bam-pass-overlay.open,
 #de-bam-pass-popin-container .de-bam-pass-overlay-above.open {display: inline-block;}
@@ -30,7 +31,7 @@
 #de-bam-pass-popin-container .de-bam-pass-loader {display: none; position: absolute; left: 50%; top: 50%; margin: -20px 0 0 -20px; font-size: 40px; color: #FFFFFF; z-index: 999992;}
 #de-bam-pass-popin-container .de-bam-pass-loader.open {display: inline-block;}
 
-#de-bam-pass-popin-container .de-bam-pass-popin {background-color: #FFFFFF; position: absolute; left: 50%; top: 50%; z-index: 999995; -webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);}
+#de-bam-pass-popin-container .de-bam-pass-popin {background-color: #FFFFFF; display: inline-block; vertical-align: middle; position: relative; /*left: 50%; top: 50%;*/ z-index: 999995; /*-webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);*/}
 #de-bam-pass-popin-container .de-bam-pass-popin .close {background-color: #FFFFFF; position: absolute; right: 0px; top: 0px; border-radius: 50%; -webkit-appearance: none; width: 50px; height: 50px; box-shadow: #A7A7A7 0px 0px 5px 1px; -webkit-transform: translate(50%, -50%); transform: translate(50%, -50%);}
 #de-bam-pass-popin-container .de-bam-pass-popin .close::before,
 #de-bam-pass-popin-container .de-bam-pass-popin .close::after {content: ""; background-color: #919191; position: absolute; left: 50%; top: 50%; width: 24px; height: 3px; border-radius: 5px;}
@@ -62,12 +63,36 @@
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content .description {margin-top: 15px; font-family: Hanken; font-size: 15px; line-height: 1.1em; font-weight: bold; color: #919191;}
 
 /* Registration form */
-#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content {}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin {width: calc(100% - 40px); max-width: 700px;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content {text-align: initial;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review {background-color: #FFFFFF;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .cart {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .cart__footer {display: none;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .checkout__billing {}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .checkout__billing .woocommerce-login-fields {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .checkout__billing .woocommerce-coupon-fields {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .checkout__billing .woocommerce-shipping-fields .shipping_address {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review #payment {display: none;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row {margin-bottom: 15px;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row.notes {display: none;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row.place-order,
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row.terms {margin-bottom: 0px;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='text'],
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='password'],
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='email'],
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='tel'],
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='url'],
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review input[type='search'] {padding-top: 8px; padding-bottom: 8px;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review textarea {resize: vertical;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review #place_order {display: block; margin: 0 auto;}
+
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-errors-container {width: 100%; margin-bottom: 10px;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-errors-container ul li {font-size: 14px; color: #FF0000;}
 
 
 
