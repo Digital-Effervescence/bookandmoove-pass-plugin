@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-05 11:38+0200\n"
-"PO-Revision-Date: 2017-09-05 11:38+0200\n"
+"POT-Creation-Date: 2017-09-05 12:22+0200\n"
+"PO-Revision-Date: 2017-09-05 12:22+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -83,33 +83,49 @@ msgstr "Doit être supérieur ou égal à %d"
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:730
+#: de-bam-pass.php:694
+msgid "Code"
+msgstr "Code"
+
+#: de-bam-pass.php:694
+msgid "Expiration date"
+msgstr "Date d'expiration"
+
+#: de-bam-pass.php:694
+msgid "Membership Plan"
+msgstr "Membership Plan"
+
+#: de-bam-pass.php:752
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
+
+#: de-bam-pass.php:753
+msgid "CSV file :"
+msgstr "Fichier CSV :"
 
 #: templates/admin/page-pass-generator.php:2
 msgid "Pass generation"
 msgstr "Génération de pass"
 
-#: templates/admin/page-pass-generator.php:14
+#: templates/admin/page-pass-generator.php:22
 msgid "Plan type"
 msgstr "Type de plan"
 
-#: templates/admin/page-pass-generator.php:28
+#: templates/admin/page-pass-generator.php:36
 msgid "Codes expiration date"
 msgstr "Date d'expiration des codes"
 
-#: templates/admin/page-pass-generator.php:37
+#: templates/admin/page-pass-generator.php:45
 msgid "Pass number"
 msgstr "Nombre de pass"
 
-#: templates/admin/page-pass-generator.php:38
+#: templates/admin/page-pass-generator.php:46
 #, php-format
 msgid "Max %d"
 msgstr "%d maximum"
 
-#: templates/admin/page-pass-generator.php:46
+#: templates/admin/page-pass-generator.php:54
 msgid "Generate"
 msgstr "Générer"
 

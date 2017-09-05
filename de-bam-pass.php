@@ -684,6 +684,21 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							}
 							
 							
+							// Création du fichier CSV
+							$directoryName = "/exports/";
+							$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
+							$this->exportDirectoryCheck($uploadExportsPath);
+							
+							$fileName = date('Y') ."_". date('m') ."_". date('d') ."-". date('H') ."_". date('i') ."_". date('s') ."-pass_generation.csv";
+							$filePath = $uploadExportsPath . $fileName;
+							
+							$csvTitle = array(__("Code", "debampass"), __("Expiration date", "debampass"), __("Membership Plan", "debampass"));
+							
+							$handle = fopen($filePath, 'w');
+							fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
+							fputcsv($handle, $csvTitle, ';'); // Titre
+							
+							
 							$queryInsertPassTitle = "";
 							$queryInsertPassTitle .= "INSERT INTO $tableName (membership_plan, code, date_end_code_active, created_at) ";
 							$queryInsertPassTitle .= "VALUES ";
@@ -714,6 +729,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 								
 								$queryInsertPass .= "(". $membershipPlan->id .", '". $codeString ."', '". $_POST['pass-generation-codes-expiration-date'] ."', NOW())";
 								
+								// fputcsv($handle, array($codeString, $_POST['pass-generation-codes-expiration-date'], $membershipPlan->name), ';');
+								fputcsv($handle, array('"'. $codeString .'"', $_POST['pass-generation-codes-expiration-date'], $membershipPlan->name), ';');
+								
 								if ($i % $batchSize == 0) {
 									$queryString = $queryInsertPassTitle . $queryInsertPass;
 									$resultInsertPass = $wpdb->query($queryString);
@@ -723,11 +741,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 								}
 							}
 							
+							fclose($handle);
+							
 							$queryString = $queryInsertPassTitle . $queryInsertPass;
 							$resultInsertPass = $wpdb->query($queryString);
 							$nbInsertedRows += $resultInsertPass;
 							
 							array_push($validationMessages, sprintf(__("%d pass inserted successfully", "debampass"), $nbInsertedRows));
+							array_push($validationMessages, __("CSV file :", "debampass") .' <a href="'. plugins_url($directoryName . $fileName, __FILE__) .'" target="_blank">'. $fileName .'</a>');
 						}
 					}
 				}
@@ -737,6 +758,19 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				// echo "<pre>";
 				// print_r($membershipPlan);
 				// echo "</pre>";
+			}
+			
+			private function exportDirectoryCheck($path)
+			{
+				// Dossier d'export des CSV
+				if (!file_exists($path)) {
+					mkdir($path, 0775, true);
+					
+					// $handle = fopen($path .'index.php', 'w');
+					// fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
+					// fwrite($handle, "<?php // Munen");
+					// fclose($handle);
+				}
 			}
 			
 			// TMP
