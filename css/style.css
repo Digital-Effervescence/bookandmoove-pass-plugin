@@ -1,16 +1,16 @@
 /* Buttons */
-.de-bam-pass-button {background-color: #FF4D58; display: inline-block; border: 1px solid #FF4D58; border-radius: 4px; padding: 6px 16px; color: #FFFFFF; font-family: Hanken; font-size: 14px; -webkit-transition: all 400ms ease 0s; transition: all 400ms ease 0s;}
+.de-bam-pass-button {background-color: #FF4D58; display: inline-block; border: 1px solid #FF4D58; border-radius: 4px; padding: 6px 16px; font-family: Hanken; font-size: 14px; color: #FFFFFF; cursor: pointer; -webkit-transition: all 400ms ease 0s; transition: all 400ms ease 0s;}
 .de-bam-pass-button:hover {background-color: #FFFFFF; color: #FF4D58;}
 
 .de-bam-pass-button.empty {background-color: #FFFFFF; color: #FF4D58;}
 .de-bam-pass-button.empty:hover {background-color: #FF4D58; color: #FFFFFF;}
 
-.de-bam-pass-button-color {background-color: #FF4D58; display: inline-block; border: 1px solid #FF4D58; border-radius: 4px; padding: 6px 16px; color: #FFFFFF; font-family: Hanken; font-size: 14px; -webkit-transition: all 400ms ease 0s; transition: all 400ms ease 0s;}
+.de-bam-pass-button-color {background-color: #FF4D58; display: inline-block; border: 1px solid #FF4D58; border-radius: 4px; padding: 6px 16px; font-family: Hanken; font-size: 14px; color: #FFFFFF; -webkit-transition: all 400ms ease 0s; transition: all 400ms ease 0s;}
 .de-bam-pass-button-color:hover {background-color: #484848;}
 
 
 
-#page ul.primary-menu .menu-item.save-code {background-color: #FF4D58; vertical-align: 6px; border-radius: 4px; height: auto; margin-left: 5px; -webkit-transition: 0.1s background-color ease-out; transition: 0.1s background-color ease-out;}
+#page ul.primary-menu .menu-item.save-code {background-color: #FF4D58; vertical-align: 6px; border-radius: 4px; height: auto; margin-left: 5px; cursor: pointer; -webkit-transition: 0.1s background-color ease-out; transition: 0.1s background-color ease-out;}
 #page ul.primary-menu .menu-item.save-code:hover {background-color: #484848;}
 #page ul.primary-menu .menu-item.save-code > a {padding: 10px 20px; color: #FFFFFF;}
 
@@ -93,6 +93,23 @@
 
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-errors-container {width: 100%; margin-bottom: 10px;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-errors-container ul li {font-size: 14px; color: #FF0000;}
+
+
+
+
+
+/* ADMIN*/
+/* Pass generator */
+#debampass-generator-page .form-field {}
+#debampass-generator-page .form-field label {display: inline-block; width: 150px;}
+#debampass-generator-page .form-field label + * {vertical-align: top; max-width: calc(100% - 180px);}
+#debampass-generator-page .form-field label + *.short {width: 250px;}
+#debampass-generator-page .form-field label + *.long {width: calc(100% - 180px);}
+
+#debampass-generator-page .submit-container input[type='submit'] {font-family: Arial; font-weight: bold; text-transform: uppercase;}
+
+#debampass-generator-page .errors {display: block; color: #FF0000;}
+#debampass-generator-page .global-success .message {color: #00A400;}
 
 
 

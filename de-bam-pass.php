@@ -35,19 +35,15 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				$this->templates = new PW_Template_Loader(plugin_dir_path(__FILE__));
 				
+				
 				add_filter('show_admin_bar', '__return_false'); // TMP
 				
 				$this->loadTranslations();
 				
 				add_action('init', array($this, 'init'));
-				// add_action('wp_loaded', array($this, 'wpLoaded')); // TMP
-				// add_action('woocommerce_before_calculate_totals', array($this, 'customPrice'), 10, 1); // TMP
-				// add_action('woocommerce_cart_calculate_fees', array($this, 'addCartFee'));
 				
 				add_action('wp_enqueue_scripts', array($this, 'loadStylesScripts'));
-				
-				// add_action('woocommerce_checkout_fields', array($this, 'woocommerCheckoutForm'));
-				add_action('woocommerce_checkout_process', array($this, 'woocommerCheckoutFormFieldProcess'));
+				add_action('admin_enqueue_scripts', array($this, 'loadStylesScriptsAdmin'));
 				
 				// Ajax popin 'entrer code'
 				add_action('wp_ajax_enterCodePopin', array($this, 'enterCodePopin'));
@@ -78,7 +74,17 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				add_action('wp_ajax_nopriv_messageValidationPass', array($this, 'messageValidationPass'));
 				
 				
+				// AJAX TMP
+				// add_action('wp_ajax_tmpPassGenerator', array($this, 'tmpPassGenerator'));
+				// add_action('wp_ajax_nopriv_tmpPassGenerator', array($this, 'tmpPassGenerator'));
+				
+				
 				add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
+				
+				
+				
+				// Admin
+				add_action('admin_menu', array($this, 'deBamPassAdminMenu'));
 			}
 			
 			// Installation du plugin
@@ -100,6 +106,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				  created_at DATETIME NOT NULL,
 				  updated_at DATETIME,
 				  PRIMARY KEY  (id)
+				  KEY INDEX_CODE (code)
 				) $charsetCollate;";
 
 				require_once (ABSPATH .'wp-admin/includes/upgrade.php');
@@ -492,6 +499,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				wp_localize_script('de_bam_script', 'checkoutButtonLabel', __("Activate my code", "debampass"));
 			}
 			
+			// Chargement des css et js dans l'admin
+			public function loadStylesScriptsAdmin()
+			{
+				wp_enqueue_style('de_bam_style_admin', plugin_dir_url(__FILE__) .'css/style.css', array(), false, 'screen');
+			}
+			
 			public function loginRedirect($redirect_to, $request, $user)
 			{
 				return home_url() ."?de-bam=ec";
@@ -499,7 +512,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			
 			
 			// Gestion du formulaire de commande d'un Pass
-			public function woocommerCheckoutForm($fields)
+			/*public function woocommerCheckoutForm($fields)
 			{
 				echo "<pre>";
 				print_r($fields);
@@ -510,9 +523,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$fields['order']['de_bam_pass']['placeholder'] = __("Enter your card code", "debampass");
 				
 				return $fields;
-			}
+			}*/
 			
-			public function woocommerCheckoutFormFieldProcess()
+			/*public function woocommerCheckoutFormFieldProcess()
 			{
 				// global $woocommerce;
 				
@@ -522,7 +535,347 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				// wc_add_notice(__('Please enter something into this new shiny field.'), 'error');
 				// echo "test ma gueule : ". $_POST['de_bam_pass'];
 				// die();
+			}*/
+			
+			
+			
+			public function deBamPassAdminMenu()
+			{
+				add_submenu_page("woocommerce", __("Pass generator", "debampass"), __("Pass generator", "debampass"), "manage_options", "woocommerce-debampass-generator", array($this, "passGenerator"));
 			}
+			
+			// Page admin de génération de pass
+			public function passGenerator()
+			{
+				if (!current_user_can('manage_options')) {
+					wp_die(__("You are not allowed to access this page."));
+				}
+				
+				$nbminPass = 1;
+				$nbMaxPass = 5000;
+				$membershipPlans = wc_memberships_get_membership_plans();
+				
+				// Validation du formulaire de génération de pass
+				if (isset($_POST['pass-generation-submit'])) {
+					$errors = array();
+					
+					$membershipPlan;
+					
+					// Membership plan
+					if (!isset($_POST['pass-generation-plan-type']) || trim($_POST['pass-generation-plan-type']) == "") { // Inexistant ou chaîne vide
+						$errors['pass-generation-plan-type'] = array(
+							'message' => __("Is required", "debampass"),
+						);
+					} else {
+						$membershipPlan = wc_memberships_get_membership_plan($_POST['pass-generation-plan-type']);
+						
+						if (empty($membershipPlan)) {
+							$errors['pass-generation-plan-type'] = array(
+								'message' => __("Is not a valid membership plan", "debampass"),
+							);
+						}
+					}
+					
+					// Date d'expiration
+					if (!isset($_POST['pass-generation-codes-expiration-date']) || trim($_POST['pass-generation-codes-expiration-date']) == "") { // Inexistant ou chaîne vide
+						$errors['pass-generation-codes-expiration-date'] = array(
+							'message' => __("Is required", "debampass"),
+						);
+					} else {
+						$expireDateExploded = explode('-', $_POST['pass-generation-codes-expiration-date']);
+						
+						// Mauvais format
+						if (!(strlen($_POST['pass-generation-codes-expiration-date']) == 10 && count($expireDateExploded) == 3 && strlen($expireDateExploded[0]) == 4 && is_numeric($expireDateExploded[0]) && strlen($expireDateExploded[1]) == 2 && is_numeric($expireDateExploded[1]) && strlen($expireDateExploded[2]) == 2 && is_numeric($expireDateExploded[2]))) {
+							$errors['pass-generation-codes-expiration-date'] = array(
+								'message' => __("Must be a valid date", "debampass"),
+							);
+						}
+					}
+					
+					// Nombre de pass
+					if (!isset($_POST['pass-generation-pass-number']) || trim($_POST['pass-generation-pass-number']) == "") { // Inexistant ou chaîne vide
+						$errors['pass-generation-pass-number'] = array(
+							'message' => __("Is required", "debampass"),
+						);
+					} else {
+						if (!ctype_digit($_POST['pass-generation-pass-number'])) { // N'est pas un nombre valide
+							$errors['pass-generation-pass-number'] = array(
+								'message' => __("Must be a number", "debampass"),
+							);
+						} else {
+							if ($_POST['pass-generation-pass-number'] > $nbMaxPass) { // Trop grand
+								$errors['pass-generation-pass-number'] = array(
+									'message' => sprintf(__("Must be less than or equal to %d", "debampass"), $nbMaxPass),
+								);
+							} else {
+								if ($_POST['pass-generation-pass-number'] < $nbminPass) { // Trop petit
+									$errors['pass-generation-pass-number'] = array(
+										'message' => sprintf(__("Must be greater than or equal to %d", "debampass"), $nbminPass),
+									);
+								}
+							}
+						}
+					}
+					
+					
+					// Formulaire valide
+					if (empty($errors)) {
+						global $wpdb;
+						
+						$generationErrors = array();
+						$validationMessages = array();
+						
+						// Variables de l'algo
+						$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
+						
+						$max = 999999999; // Nombre maximum des codes
+						$maxString = $max ."";
+						$maxLength = strlen($maxString);
+						
+						$b = 1; // L'occurence de la boucle. Sert comme valeur initiale pour le code.
+						
+						$code; // Le code courant
+						$codeTmp = $b;
+						
+						$batchSize = 1000;
+						
+						$tableName = $wpdb->prefix ."debampass";
+						
+						// On récupère le nombre d'enregistrements
+						$queryNbPass = "";
+						$queryNbPass .= "SELECT COUNT(id) ";
+						$queryNbPass .= "FROM $tableName ";
+						
+						$resultNbPass = $wpdb->get_var($queryNbPass);
+						
+						
+						// Si on a moins de codes disponibles que de codes que l'on veut générer
+						if (($max - $resultNbPass) < $_POST['pass-generation-pass-number']) {
+							array_push($generationErrors, sprintf(__("There are only %d available codes left", "debampass"), ($max - $resultNbPass)));
+						} else {
+							if ($resultNbPass == 0) { // Première génération
+								$code = $b;
+							} else {
+								// On récupère le dernier enregistrement en BDD pour continuer à partir de son code
+								$queryGetLastPass = "";
+								$queryGetLastPass .= "SELECT code ";
+								$queryGetLastPass .= "FROM $tableName ";
+								$queryGetLastPass .= "ORDER BY id DESC ";
+								$queryGetLastPass .= "LIMIT 1";
+								
+								$resultLastPass = $wpdb->get_results($queryGetLastPass);
+								
+								$code = $resultLastPass[0]->code;
+								$code = intval($code);
+								
+								// On calcule l'occurence ($b) de la boucle
+								$i = 0;
+								$codeTmp;
+								while ($codeTmp != $code) {
+									$codeTmp = $codeTmp + $step;
+									
+									if ($codeTmp > $max) {
+										$b++;
+										$codeTmp = $b;
+									}
+									
+									$i++;
+								}
+							}
+							
+							
+							$queryInsertPassTitle = "";
+							$queryInsertPassTitle .= "INSERT INTO $tableName (membership_plan, code, date_end_code_active, created_at) ";
+							$queryInsertPassTitle .= "VALUES ";
+							
+							
+							// On va générer les pass (autant que défini dans $_POST['pass-generation-pass-number'])
+							$codeString;
+							$queryInsertPass = "";
+							$nbInsertedRows = 0;
+							for ($i = 0; $i < $_POST['pass-generation-pass-number']; $i++) {
+								$code = $code + $step;
+								
+								// Si on dépasse $max (999999999) -> on recommence en ajoutant 1 à la valeur initiale
+								if ($code > $max) {
+									$b++;
+									$code = $b;
+								}
+								
+								$codeString = $code ."";
+								$codeStringLength = strlen($codeString);
+								for ($j = 0; $j < $maxLength - $codeStringLength; $j++) {
+									$codeString = "0". $codeString;
+								}
+								
+								if ($i != 0 && ($i % $batchSize) != 1) {
+									$queryInsertPass .= ", ";
+								}
+								
+								$queryInsertPass .= "(". $membershipPlan->id .", '". $codeString ."', '". $_POST['pass-generation-codes-expiration-date'] ."', NOW())";
+								
+								if ($i % $batchSize == 0) {
+									$queryString = $queryInsertPassTitle . $queryInsertPass;
+									$resultInsertPass = $wpdb->query($queryString);
+									$nbInsertedRows += $resultInsertPass;
+									
+									$queryInsertPass = "";
+								}
+							}
+							
+							$queryString = $queryInsertPassTitle . $queryInsertPass;
+							$resultInsertPass = $wpdb->query($queryString);
+							$nbInsertedRows += $resultInsertPass;
+							
+							array_push($validationMessages, sprintf(__("%d pass inserted successfully", "debampass"), $nbInsertedRows));
+						}
+					}
+				}
+				
+				include "templates/admin/page-pass-generator.php";
+				
+				// echo "<pre>";
+				// print_r($membershipPlan);
+				// echo "</pre>";
+			}
+			
+			// TMP
+			/*public function tmpPassGenerator()
+			{
+				global $wpdb;
+				
+				$generationErrors = array();
+				
+				// Variables de l'algo
+				$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
+				
+				$max = 999999999; // Nombre maximum des codes
+				$maxString = $max ."";
+				$maxLength = strlen($maxString);
+				// $max = 4000; // Nombre maximum des codes
+				
+				$b = 1; // L'occurence de la boucle. Sert comme valeur initiale pour le code.
+				
+				$code; // Le code courant
+				$codeTmp = $b;
+				
+				
+				$batchSize = 1000;
+				
+				$tableName = $wpdb->prefix ."debampass";
+				
+				// On récupère le nombre d'enregistrements
+				$queryNbPass = "";
+				$queryNbPass .= "SELECT COUNT(id) ";
+				$queryNbPass .= "FROM $tableName ";
+				
+				$resultNbPass = $wpdb->get_var($queryNbPass);
+				
+				
+				// Si on a moins de codes disponibles que de codes que l'on veut générer
+				if (($max - $resultNbPass) < $_POST['pass-generation-pass-number']) {
+					array_push($generationErrors, sprintf(__("There are only %d available codes left", "debampass"), ($max - $resultNbPass)));
+				} else {
+					if ($resultNbPass == 0) { // Première génération
+						$code = $b;
+					} else {
+						// On récupère le dernier enregistrement en BDD pour continuer à partir de son code
+						$queryGetLastPass = "";
+						$queryGetLastPass .= "SELECT code ";
+						$queryGetLastPass .= "FROM $tableName ";
+						$queryGetLastPass .= "ORDER BY id DESC ";
+						$queryGetLastPass .= "LIMIT 1";
+						
+						$resultLastPass = $wpdb->get_results($queryGetLastPass);
+						
+						$code = $resultLastPass[0]->code;
+						$code = intval($code);
+						
+						// On calcule l'occurence ($b) de la boucle
+						$i = 0;
+						$codeTmp;
+						while ($codeTmp != $code) {
+							$codeTmp = $codeTmp + $step;
+							
+							if ($codeTmp > $max) {
+								$b++;
+								$codeTmp = $b;
+							}
+							
+							$i++;
+						}
+					}
+					
+					
+					$queryInsertPassTitle = "";
+					$queryInsertPassTitle .= "INSERT INTO $tableName (membership_plan, code, date_end_code_active, created_at) ";
+					$queryInsertPassTitle .= "VALUES ";
+					
+					
+					$uploadExportsPath = realpath(dirname(__FILE__)) ."/exports/";
+					if (!file_exists($uploadExportsPath)) {
+						$returned = mkdir($uploadExportsPath, 0775, true);
+					}
+					
+					// On va générer les pass (autant que défini dans $_POST['pass-generation-pass-number'])
+					$codeString;
+					
+					$queryInsertPass = "";
+					// $queryInsertPass .= ", ";
+					
+					$indexFile = 0;
+					for ($i = 0; $i < $_POST['pass-generation-pass-number']; $i++) {
+						// $codeTmp = $code + $step;
+						$code = $code + $step;
+						
+						// Si on dépasse $max (999999999) -> on recommence en ajoutant 1 à la valeur initiale
+						// if ($codeTmp > $max) {
+						if ($code > $max) {
+							$b++;
+							$code = $b;
+						}
+						
+						$codeString = $code ."";
+						$codeStringLength = strlen($codeString);
+						for ($j = 0; $j < $maxLength - $codeStringLength; $j++) {
+							$codeString = "0". $codeString;
+						}
+						
+						// if ($i > 0) {
+						if ($i != 0 && ($i % $batchSize) != 1) {
+							$queryInsertPass .= ", ";
+						}
+						
+						$queryInsertPass .= "(12166, '". $codeString ."', '". $_POST['pass-generation-codes-expiration-date'] ."', NOW())";
+						
+						if ($i % $batchSize == 0) {
+							$queryString = $queryInsertPassTitle . $queryInsertPass;
+							
+							$filePath = $uploadExportsPath . "query_". $indexFile .".sql";
+							
+							$handle = fopen($filePath, 'w');
+							fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
+							fwrite($handle, $queryString);
+							fclose($handle);
+							
+							$queryInsertPass = "";
+							// $queryInsertPass .= ", ";
+							$indexFile++;
+						}
+					}
+					
+					
+					$queryString = $queryInsertPassTitle . $queryInsertPass;
+					$filePath = $uploadExportsPath . "query_". $indexFile .".sql";
+					
+					$handle = fopen($filePath, 'w');
+					fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
+					fwrite($handle, $queryString);
+					fclose($handle);
+					
+					exit;
+				}
+			}*/
 		}
 		
 		new DEBamPass();

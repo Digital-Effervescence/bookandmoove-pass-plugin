@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-01 13:34+0200\n"
-"PO-Revision-Date: 2017-09-01 13:38+0200\n"
+"POT-Creation-Date: 2017-09-05 11:38+0200\n"
+"PO-Revision-Date: 2017-09-05 11:38+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,35 +22,100 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:196
+#: de-bam-pass.php:203
 msgid "The entered code is incorrect"
 msgstr "Le code entré est incorrect"
 
-#: de-bam-pass.php:214 de-bam-pass.php:292 de-bam-pass.php:303
-#: de-bam-pass.php:341 de-bam-pass.php:350 de-bam-pass.php:393
-#: de-bam-pass.php:413 de-bam-pass.php:423 de-bam-pass.php:432
+#: de-bam-pass.php:221 de-bam-pass.php:306 de-bam-pass.php:317
+#: de-bam-pass.php:355 de-bam-pass.php:364 de-bam-pass.php:407
+#: de-bam-pass.php:444 de-bam-pass.php:454 de-bam-pass.php:463
 msgid "An error has occurred"
 msgstr "Une erreur est survenue"
 
-#: de-bam-pass.php:372
+#: de-bam-pass.php:386
 msgid "Pass activated"
 msgstr "Pass activé"
 
-#: de-bam-pass.php:388
+#: de-bam-pass.php:402
 msgid "Pass activation error"
 msgstr "Erreur lors de l'activation du pass"
 
-#: de-bam-pass.php:468
+#: de-bam-pass.php:499
 msgid "Activate my code"
 msgstr "Activer mon code"
 
-#: de-bam-pass.php:485 templates/popin-enter-code.php:5
+#: de-bam-pass.php:544
+msgid "Pass generator"
+msgstr "Générateur de pass"
+
+#: de-bam-pass.php:551
+msgid "You are not allowed to access this page."
+msgstr "Vous n'avez pas la permission d'accéder à cette page."
+
+#: de-bam-pass.php:567 de-bam-pass.php:582 de-bam-pass.php:598
+msgid "Is required"
+msgstr "Est requis"
+
+#: de-bam-pass.php:574
+msgid "Is not a valid membership plan"
+msgstr "N'est pas un membership plan valide"
+
+#: de-bam-pass.php:590
+msgid "Must be a valid date"
+msgstr "Doit être une date valide"
+
+#: de-bam-pass.php:603
+msgid "Must be a number"
+msgstr "Doit être un nombre entier"
+
+#: de-bam-pass.php:608
+#, php-format
+msgid "Must be less than or equal to %d"
+msgstr "Doit être inférieur ou égal à %d"
+
+#: de-bam-pass.php:613
+#, php-format
+msgid "Must be greater than or equal to %d"
+msgstr "Doit être supérieur ou égal à %d"
+
+#: de-bam-pass.php:654
+#, php-format
+msgid "There are only %d available codes left"
+msgstr "Il ne reste plus que %d codes disponibles"
+
+#: de-bam-pass.php:730
+#, php-format
+msgid "%d pass inserted successfully"
+msgstr "%d pass insérés avec succès"
+
+#: templates/admin/page-pass-generator.php:2
+msgid "Pass generation"
+msgstr "Génération de pass"
+
+#: templates/admin/page-pass-generator.php:14
+msgid "Plan type"
+msgstr "Type de plan"
+
+#: templates/admin/page-pass-generator.php:28
+msgid "Codes expiration date"
+msgstr "Date d'expiration des codes"
+
+#: templates/admin/page-pass-generator.php:37
+msgid "Pass number"
+msgstr "Nombre de pass"
+
+#: templates/admin/page-pass-generator.php:38
+#, php-format
+msgid "Max %d"
+msgstr "%d maximum"
+
+#: templates/admin/page-pass-generator.php:46
+msgid "Generate"
+msgstr "Générer"
+
+#: templates/popin-enter-code.php:5
 msgid "Activate my BookandMoove code"
 msgstr "Activer mon code BookandMoove"
-
-#: de-bam-pass.php:486
-msgid "Enter your card code"
-msgstr "Saisissez le code de votre carte"
 
 #: templates/popin-enter-code.php:9
 msgid "Enter the code of your card"
@@ -123,3 +188,9 @@ msgstr "Vous devez d’abord en créer un pour activer votre code."
 #: templates/popin-registration.php:30
 msgid "Create an acount"
 msgstr "Créer un compte"
+
+#~ msgid "Max 5000"
+#~ msgstr "5000 maximum"
+
+#~ msgid "Enter your card code"
+#~ msgstr "Saisissez le code de votre carte"
