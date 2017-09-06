@@ -561,6 +561,16 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					wp_die(__("You are not allowed to access this page."));
 				}
 				
+				
+				$generationErrors = array();
+				
+				// Création du dossier qui contiendra les CSV
+				$directoryName = "/exports/";
+				$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
+				if (!$this->exportDirectoryCheck($uploadExportsPath)) {
+					array_push($generationErrors, __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"));
+				}
+				
 				$nbminPass = 1;
 				$nbMaxPass = 5000;
 				$membershipPlans = wc_memberships_get_membership_plans();
@@ -632,7 +642,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					if (empty($errors)) {
 						global $wpdb;
 						
-						$generationErrors = array();
 						$validationMessages = array();
 						
 						// Variables de l'algo
@@ -695,10 +704,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							
 							
 							// Création du fichier CSV
-							$directoryName = "/exports/";
-							$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
-							$this->exportDirectoryCheck($uploadExportsPath);
-							
 							$fileName = date('Y') ."_". date('m') ."_". date('d') ."-". date('H') ."_". date('i') ."_". date('s') ."-pass_generation.csv";
 							$filePath = $uploadExportsPath . $fileName;
 							
@@ -864,15 +869,19 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			
 			private function exportDirectoryCheck($path)
 			{
+				$isDirectoryCreated = true;
+				
 				// Dossier d'export des CSV
 				if (!file_exists($path)) {
-					mkdir($path, 0775, true);
+					$isDirectoryCreated = mkdir($path, 0775, true);
 					
 					// $handle = fopen($path .'index.php', 'w');
 					// fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
 					// fwrite($handle, "<?php // Munen");
 					// fclose($handle);
 				}
+				
+				return $isDirectoryCreated;
 			}
 			
 			// TMP

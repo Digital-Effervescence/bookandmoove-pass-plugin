@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-06 14:36+0200\n"
-"PO-Revision-Date: 2017-09-06 14:37+0200\n"
+"POT-Creation-Date: 2017-09-06 16:44+0200\n"
+"PO-Revision-Date: 2017-09-06 16:46+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -56,68 +56,78 @@ msgstr "Voir les pass"
 msgid "You are not allowed to access this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
-#: de-bam-pass.php:577 de-bam-pass.php:592 de-bam-pass.php:608
+#: de-bam-pass.php:571
+msgid ""
+"Unable to create the directory containing the CSV exports on the server. "
+"Please temporarily grant sufficient rights to the 'de-bam-pass' directory in "
+"'wp-content/plugins/' and reload the page."
+msgstr ""
+"Impossible de créer le répertoire contenant les exports CSV sur le serveur. "
+"Veuillez donner temporairement les droits suffisants sur le répertoire 'de-"
+"bam-pass' dans 'wp-content/plugins/' puis rechargez la page."
+
+#: de-bam-pass.php:587 de-bam-pass.php:602 de-bam-pass.php:618
 msgid "Is required"
 msgstr "Est requis"
 
-#: de-bam-pass.php:584
+#: de-bam-pass.php:594
 msgid "Is not a valid membership plan"
 msgstr "N'est pas un membership plan valide"
 
-#: de-bam-pass.php:600
+#: de-bam-pass.php:610
 msgid "Must be a valid date"
 msgstr "Doit être une date valide"
 
-#: de-bam-pass.php:613
+#: de-bam-pass.php:623
 msgid "Must be a number"
 msgstr "Doit être un nombre entier"
 
-#: de-bam-pass.php:618
+#: de-bam-pass.php:628
 #, php-format
 msgid "Must be less than or equal to %d"
 msgstr "Doit être inférieur ou égal à %d"
 
-#: de-bam-pass.php:623
+#: de-bam-pass.php:633
 #, php-format
 msgid "Must be greater than or equal to %d"
 msgstr "Doit être supérieur ou égal à %d"
 
-#: de-bam-pass.php:664
+#: de-bam-pass.php:673
 #, php-format
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:705 inc/class-de-list-table.php:224
+#: de-bam-pass.php:710 inc/class-de-list-table.php:242
 msgid "Code"
 msgstr "Code"
 
-#: de-bam-pass.php:705 inc/class-de-list-table.php:227
-#: templates/admin/page-passes-generated.php:48
+#: de-bam-pass.php:710 inc/class-de-list-table.php:245
+#: templates/admin/page-passes-generated.php:49
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: de-bam-pass.php:705 inc/class-de-list-table.php:226
+#: de-bam-pass.php:710 inc/class-de-list-table.php:244
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
-#: de-bam-pass.php:760
+#: de-bam-pass.php:765
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
 
-#: de-bam-pass.php:761
+#: de-bam-pass.php:766
 msgid "CSV file :"
 msgstr "Fichier CSV :"
 
-#: inc/class-de-list-table.php:225
+#: inc/class-de-list-table.php:243
 msgid "User"
 msgstr "Utilisateur"
 
-#: inc/class-de-list-table.php:228 templates/admin/page-passes-generated.php:65
+#: inc/class-de-list-table.php:246 templates/admin/page-passes-generated.php:66
 msgid "Activation date"
 msgstr "Date d'activation"
 
-#: inc/class-de-list-table.php:229 templates/admin/page-passes-generated.php:82
+#: inc/class-de-list-table.php:247 templates/admin/page-passes-generated.php:83
 msgid "Creation date"
 msgstr "Date de création"
 
@@ -131,7 +141,7 @@ msgstr "Extrait"
 
 #: inc/class-wp-list-table.php:334
 msgid "No items found."
-msgstr "Pas d'objet trouvé"
+msgstr "Pas d'objet trouvé."
 
 #: inc/class-wp-list-table.php:461
 msgid "Select bulk action"
@@ -242,7 +252,7 @@ msgid "Activated passes"
 msgstr "Pass activés"
 
 #: templates/admin/page-passes-activated.php:4
-#: templates/admin/page-passes-generated.php:28
+#: templates/admin/page-passes-generated.php:29
 msgid "Passes activated"
 msgstr "Pass activés"
 
@@ -254,36 +264,36 @@ msgstr "Pass générés"
 msgid "Passes status"
 msgstr "Statut des pass"
 
-#: templates/admin/page-passes-generated.php:25
+#: templates/admin/page-passes-generated.php:26
 msgid "Not specified"
 msgstr "Non spécifié"
 
-#: templates/admin/page-passes-generated.php:31
+#: templates/admin/page-passes-generated.php:32
 msgid "Passes not activated"
 msgstr "Pass non activés"
 
-#: templates/admin/page-passes-generated.php:37
+#: templates/admin/page-passes-generated.php:38
 #: templates/admin/page-passes-generator.php:22
 msgid "Plan type"
 msgstr "Type de plan"
 
-#: templates/admin/page-passes-generated.php:39
+#: templates/admin/page-passes-generated.php:40
 msgid "Select"
 msgstr "Sélectionner"
 
-#: templates/admin/page-passes-generated.php:52
-#: templates/admin/page-passes-generated.php:69
-#: templates/admin/page-passes-generated.php:86
+#: templates/admin/page-passes-generated.php:53
+#: templates/admin/page-passes-generated.php:70
+#: templates/admin/page-passes-generated.php:87
 msgid "Start"
 msgstr "Début"
 
-#: templates/admin/page-passes-generated.php:58
-#: templates/admin/page-passes-generated.php:75
-#: templates/admin/page-passes-generated.php:92
+#: templates/admin/page-passes-generated.php:59
+#: templates/admin/page-passes-generated.php:76
+#: templates/admin/page-passes-generated.php:93
 msgid "End"
 msgstr "Fin"
 
-#: templates/admin/page-passes-generated.php:97
+#: templates/admin/page-passes-generated.php:98
 msgid "Passes search"
 msgstr "Recherche de pass"
 
