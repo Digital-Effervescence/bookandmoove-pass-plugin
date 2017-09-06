@@ -31,7 +31,7 @@
 #de-bam-pass-popin-container .de-bam-pass-loader {display: none; position: absolute; left: 50%; top: 50%; margin: -20px 0 0 -20px; font-size: 40px; color: #FFFFFF; z-index: 999992;}
 #de-bam-pass-popin-container .de-bam-pass-loader.open {display: inline-block;}
 
-#de-bam-pass-popin-container .de-bam-pass-popin {background-color: #FFFFFF; display: inline-block; vertical-align: middle; position: relative; /*left: 50%; top: 50%;*/ z-index: 999995; /*-webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);*/}
+#de-bam-pass-popin-container .de-bam-pass-popin {background-color: #FFFFFF; display: inline-block; vertical-align: middle; position: relative; margin: 20px 0; z-index: 999995; /*-webkit-transform: translate(-50%, -50%); transform: translate(-50%, -50%);*/}
 #de-bam-pass-popin-container .de-bam-pass-popin .close {background-color: #FFFFFF; position: absolute; right: 0px; top: 0px; border-radius: 50%; -webkit-appearance: none; width: 50px; height: 50px; box-shadow: #A7A7A7 0px 0px 5px 1px; -webkit-transform: translate(50%, -50%); transform: translate(50%, -50%);}
 #de-bam-pass-popin-container .de-bam-pass-popin .close::before,
 #de-bam-pass-popin-container .de-bam-pass-popin .close::after {content: ""; background-color: #919191; position: absolute; left: 50%; top: 50%; width: 24px; height: 3px; border-radius: 5px;}
@@ -65,7 +65,7 @@
 /* Registration form */
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin {width: calc(100% - 40px); max-width: 700px;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content {text-align: initial;}
-#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review {background-color: #FFFFFF;}
+#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review {background-color: #FFFFFF; margin-left: 0px;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .cart {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .cart__footer {display: none;}
 #de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .checkout__billing {}
@@ -164,7 +164,7 @@
 
 @media (max-width: 900px)
 {
-	
+	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row {padding-left: 0px;}
 }
 
 @media (max-width: 767px)
