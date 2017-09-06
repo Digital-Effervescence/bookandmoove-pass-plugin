@@ -7,7 +7,6 @@
 	Author URI:  http://www.digital-effervescence.com/
 */
 
-
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
 	exit;
@@ -19,6 +18,9 @@ if (!defined('DEBAMPASS')) {
 
 require dirname(DEBAMPASS) .'/inc/Gamajo_Template_Loader.php';
 require dirname(DEBAMPASS) .'/inc/PW_Template_Loader.php';
+
+require dirname(DEBAMPASS) .'/inc/class-de-list-table.php';
+
 
 // Seulement si les plugins 'WooCommerce' et 'WooCommerce Membership' sont actifs
 if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins'))) && in_array('woocommerce-memberships/woocommerce-memberships.php', apply_filters('active_plugins', get_option('active_plugins')))) {
@@ -542,6 +544,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			public function deBamPassAdminMenu()
 			{
 				add_submenu_page("woocommerce", __("Pass generator", "debampass"), __("Pass generator", "debampass"), "manage_options", "woocommerce-debampass-generator", array($this, "passGenerator"));
+				
+				add_submenu_page("woocommerce", __("Pass viewer", "debampass"), __("Pass viewer", "debampass"), "manage_options", "woocommerce-debampass-viewer", array($this, "passViewer"));
 			}
 			
 			// Page admin de génération de pass
@@ -644,7 +648,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						// On récupère le nombre d'enregistrements
 						$queryNbPass = "";
 						$queryNbPass .= "SELECT COUNT(id) ";
-						$queryNbPass .= "FROM $tableName ";
+						$queryNbPass .= "FROM $tableName";
 						
 						$resultNbPass = $wpdb->get_var($queryNbPass);
 						
@@ -753,12 +757,51 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					}
 				}
 				
-				include "templates/admin/page-pass-generator.php";
+				include "templates/admin/page-passes-generator.php";
 				
 				// echo "<pre>";
 				// print_r($membershipPlan);
 				// echo "</pre>";
 			}
+			
+			// Dispatcher sur le bon onglet de la page 'Pass viewer'
+			public function passViewer()
+			{
+				if (isset($_GET['tab'])) {
+					$activeTab = $_GET['tab'];
+					
+					if ($activeTab == "generated-passes") {
+						$this->passGenerated($activeTab);
+					} elseif ($activeTab == "activated-passes") {
+						$this->passActivated($activeTab);
+					}
+				} else {
+					$activeTab = "generated-passes";
+					
+					$this->passGenerated($activeTab);
+				}
+			}
+			
+			// Page admin de visualisation des pass générés
+			private function passGenerated($activeTab)
+			{
+				$generatedPassListTable = new DE_List_Table_Pass_Generated();
+				
+				if (isset($_GET['paged'])) {
+					$generatedPassListTable->setCurrentNumPage($_GET['paged']);
+				}
+				
+				$generatedPassListTable->prepare_items(); 
+				
+				include "templates/admin/page-passes-generated.php";
+			}
+			
+			// Page admin de visualisation des pass activés
+			private function passActivated($activeTab)
+			{
+				include "templates/admin/page-passes-activated.php";
+			}
+			
 			
 			private function exportDirectoryCheck($path)
 			{

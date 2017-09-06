@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-05 12:22+0200\n"
-"PO-Revision-Date: 2017-09-05 12:22+0200\n"
+"POT-Creation-Date: 2017-09-05 15:05+0200\n"
+"PO-Revision-Date: 2017-09-05 15:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,110 +22,254 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:203
+#: de-bam-pass.php:205
 msgid "The entered code is incorrect"
 msgstr "Le code entré est incorrect"
 
-#: de-bam-pass.php:221 de-bam-pass.php:306 de-bam-pass.php:317
-#: de-bam-pass.php:355 de-bam-pass.php:364 de-bam-pass.php:407
-#: de-bam-pass.php:444 de-bam-pass.php:454 de-bam-pass.php:463
+#: de-bam-pass.php:223 de-bam-pass.php:308 de-bam-pass.php:319
+#: de-bam-pass.php:357 de-bam-pass.php:366 de-bam-pass.php:409
+#: de-bam-pass.php:446 de-bam-pass.php:456 de-bam-pass.php:465
 msgid "An error has occurred"
 msgstr "Une erreur est survenue"
 
-#: de-bam-pass.php:386
+#: de-bam-pass.php:388
 msgid "Pass activated"
 msgstr "Pass activé"
 
-#: de-bam-pass.php:402
+#: de-bam-pass.php:404
 msgid "Pass activation error"
 msgstr "Erreur lors de l'activation du pass"
 
-#: de-bam-pass.php:499
+#: de-bam-pass.php:501
 msgid "Activate my code"
 msgstr "Activer mon code"
 
-#: de-bam-pass.php:544
+#: de-bam-pass.php:546
 msgid "Pass generator"
 msgstr "Générateur de pass"
 
-#: de-bam-pass.php:551
+#: de-bam-pass.php:548
+msgid "Pass viewer"
+msgstr "Voir les pass"
+
+#: de-bam-pass.php:555
 msgid "You are not allowed to access this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
-#: de-bam-pass.php:567 de-bam-pass.php:582 de-bam-pass.php:598
+#: de-bam-pass.php:571 de-bam-pass.php:586 de-bam-pass.php:602
 msgid "Is required"
 msgstr "Est requis"
 
-#: de-bam-pass.php:574
+#: de-bam-pass.php:578
 msgid "Is not a valid membership plan"
 msgstr "N'est pas un membership plan valide"
 
-#: de-bam-pass.php:590
+#: de-bam-pass.php:594
 msgid "Must be a valid date"
 msgstr "Doit être une date valide"
 
-#: de-bam-pass.php:603
+#: de-bam-pass.php:607
 msgid "Must be a number"
 msgstr "Doit être un nombre entier"
 
-#: de-bam-pass.php:608
+#: de-bam-pass.php:612
 #, php-format
 msgid "Must be less than or equal to %d"
 msgstr "Doit être inférieur ou égal à %d"
 
-#: de-bam-pass.php:613
+#: de-bam-pass.php:617
 #, php-format
 msgid "Must be greater than or equal to %d"
 msgstr "Doit être supérieur ou égal à %d"
 
-#: de-bam-pass.php:654
+#: de-bam-pass.php:658
 #, php-format
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:694
+#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:29
 msgid "Code"
 msgstr "Code"
 
-#: de-bam-pass.php:694
+#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:32
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: de-bam-pass.php:694
+#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:31
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
-#: de-bam-pass.php:752
+#: de-bam-pass.php:754
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
 
-#: de-bam-pass.php:753
+#: de-bam-pass.php:755
 msgid "CSV file :"
 msgstr "Fichier CSV :"
 
-#: templates/admin/page-pass-generator.php:2
+#: inc/class-wp-list-table-de.php:30
+msgid "User"
+msgstr "Utilisateur"
+
+#: inc/class-wp-list-table-de.php:33
+msgid "Creation date"
+msgstr "Date de création"
+
+#: inc/class-wp-list-table-de.php:34
+msgid "Activation date"
+msgstr "Date d'activation"
+
+#: inc/class-wp-list-table.php:162
+msgid "List View"
+msgstr "Liste"
+
+#: inc/class-wp-list-table.php:163
+msgid "Excerpt View"
+msgstr "Extrait"
+
+#: inc/class-wp-list-table.php:334
+msgid "No items found."
+msgstr "Pas d'objet trouvé"
+
+#: inc/class-wp-list-table.php:461
+msgid "Select bulk action"
+msgstr "Sélectionner une action groupée"
+
+#: inc/class-wp-list-table.php:463
+msgid "Bulk Actions"
+msgstr "Actions groupées"
+
+#: inc/class-wp-list-table.php:473
+msgid "Apply"
+msgstr "Appliquer"
+
+#: inc/class-wp-list-table.php:523 inc/class-wp-list-table.php:1324
+msgid "Show more details"
+msgstr "Voir plus de détails"
+
+#: inc/class-wp-list-table.php:586
+msgid "Filter by date"
+msgstr "Filtrer par date"
+
+#: inc/class-wp-list-table.php:588
+msgid "All dates"
+msgstr "Toutes les dates"
+
+#: inc/class-wp-list-table.php:601
+#, php-format
+msgid "%1$s %2$d"
+msgstr "%1$s %2$d"
+
+#: inc/class-wp-list-table.php:653
+#, php-format
+msgid "%s comment"
+msgid_plural "%s comments"
+msgstr[0] "%s commentaire"
+msgstr[1] "%s commentaires"
+
+#: inc/class-wp-list-table.php:654
+#, php-format
+msgid "%s approved comment"
+msgid_plural "%s approved comments"
+msgstr[0] "%s commentaire approuvé"
+msgstr[1] "%s commentaires approuvés"
+
+#: inc/class-wp-list-table.php:655
+#, php-format
+msgid "%s pending comment"
+msgid_plural "%s pending comments"
+msgstr[0] "%s commentaire en attente"
+msgstr[1] "%s commentaires en attente"
+
+#: inc/class-wp-list-table.php:660 inc/class-wp-list-table.php:672
+#: inc/class-wp-list-table.php:685
+msgid "No comments"
+msgstr "Pas de commentaires"
+
+#: inc/class-wp-list-table.php:672
+msgid "No approved comments"
+msgstr "Pas de commentaires approuvés"
+
+#: inc/class-wp-list-table.php:685
+msgid "No pending comments"
+msgstr "Pas de commentaires en attente"
+
+#: inc/class-wp-list-table.php:762 inc/class-wp-list-table.php:1349
+#, php-format
+msgid "%s item"
+msgid_plural "%s items"
+msgstr[0] "%s objet"
+msgstr[1] "%s objets"
+
+#: inc/class-wp-list-table.php:798
+msgid "First page"
+msgstr "Première page"
+
+#: inc/class-wp-list-table.php:808
+msgid "Previous page"
+msgstr "Page précédente"
+
+#: inc/class-wp-list-table.php:815 inc/class-wp-list-table.php:818
+msgid "Current Page"
+msgstr "Page courante"
+
+#: inc/class-wp-list-table.php:824
+#, php-format
+msgctxt "paging"
+msgid "%1$s of %2$s"
+msgstr "%1$s de %2$s"
+
+#: inc/class-wp-list-table.php:831
+msgid "Next page"
+msgstr "Page suivante"
+
+#: inc/class-wp-list-table.php:841
+msgid "Last page"
+msgstr "Dernière page"
+
+#: inc/class-wp-list-table.php:1069
+msgid "Select All"
+msgstr "Tout sélectionner"
+
+#: templates/admin/elements/tabs-pass-viewer.php:2
+msgid "Generated pass"
+msgstr "Pass générés"
+
+#: templates/admin/elements/tabs-pass-viewer.php:3
+msgid "Activated passes"
+msgstr "Pass activés"
+
+#: templates/admin/page-passes-activated.php:4
+msgid "Passes activated"
+msgstr "Pass activés"
+
+#: templates/admin/page-passes-generated.php:4
+msgid "Passes generated"
+msgstr "Pass générés"
+
+#: templates/admin/page-passes-generator.php:2
 msgid "Pass generation"
 msgstr "Génération de pass"
 
-#: templates/admin/page-pass-generator.php:22
+#: templates/admin/page-passes-generator.php:22
 msgid "Plan type"
 msgstr "Type de plan"
 
-#: templates/admin/page-pass-generator.php:36
+#: templates/admin/page-passes-generator.php:36
 msgid "Codes expiration date"
 msgstr "Date d'expiration des codes"
 
-#: templates/admin/page-pass-generator.php:45
+#: templates/admin/page-passes-generator.php:45
 msgid "Pass number"
 msgstr "Nombre de pass"
 
-#: templates/admin/page-pass-generator.php:46
+#: templates/admin/page-passes-generator.php:46
 #, php-format
 msgid "Max %d"
 msgstr "%d maximum"
 
-#: templates/admin/page-pass-generator.php:54
+#: templates/admin/page-passes-generator.php:54
 msgid "Generate"
 msgstr "Générer"
 
@@ -204,6 +348,14 @@ msgstr "Vous devez d’abord en créer un pour activer votre code."
 #: templates/popin-registration.php:30
 msgid "Create an acount"
 msgstr "Créer un compte"
+
+#, fuzzy
+#~| msgid "Generated pass"
+#~ msgid "Generated passes"
+#~ msgstr "Pass générés"
+
+#~ msgid "Pass owners"
+#~ msgstr "Pass activés"
 
 #~ msgid "Max 5000"
 #~ msgstr "5000 maximum"

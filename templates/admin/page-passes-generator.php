@@ -1,4 +1,4 @@
-<div id="debampass-generator-page">
+<div id="debampass-generator-page" class="wrap">
 	<h1><?php _e("Pass generation", "debampass"); ?></h1>
 
 	<?php if (isset($generationErrors) && !empty($generationErrors)): ?>
