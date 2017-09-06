@@ -11,6 +11,21 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	private $orderColumn = null;
 	private $orderDirection = "ASC";
 	
+	// Recherche
+	private $passStatus = null;
+	
+	private $membershipPlanId = null;
+	
+	private $expirationDateStart = null;
+	private $expirationDateEnd = null;
+	
+	private $createdAtStart = null;
+	private $createdAtEnd = null;
+	
+	private $updatedAtStart = null;
+	private $updatedAtEnd = null;
+	
+	
 	private $nbPass;
 	
 	public $items;
@@ -60,19 +75,107 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		// On récupère le nombre de pass
 		$queryCountGeneratedPasses = "";
 		$queryCountGeneratedPasses .= "SELECT COUNT(id) ";
-		$queryCountGeneratedPasses .= "FROM $tableDeBamPass";
+		$queryCountGeneratedPasses .= "FROM $tableDeBamPass ";
+		$queryCountGeneratedPasses .= "WHERE %d";
 		
-		$this->nbPass = $wpdb->get_var($queryCountGeneratedPasses);
 		
-		// On définit les variables pour la pagination
+		// Recherche
+		$queryParamsCount = array(1);
+		$queryParams = array();
+		$querySelectGeneratedPassesSearch = "WHERE 1 ";
+		
+		// Statut des pass
+		if ($this->passStatus !== null) {
+			if ($this->passStatus == 1) { // Activés
+				$queryCountGeneratedPasses .= " AND user_id IS NOT NULL AND updated_at IS NOT NULL ";
+				$querySelectGeneratedPassesSearch .= "AND dbp.user_id IS NOT NULL AND dbp.updated_at IS NOT NULL ";
+			} elseif ($this->passStatus == 0) { // Non activés
+				$queryCountGeneratedPasses .= " AND user_id IS NULL AND updated_at IS NULL ";
+				$querySelectGeneratedPassesSearch .= "AND dbp.user_id IS NULL AND dbp.updated_at IS NULL ";
+			}
+		}
+		
+		// Membership Plan
+		if ($this->membershipPlanId !== null) {
+			$queryCountGeneratedPasses .= " AND membership_plan = %d ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.membership_plan = %d ";
+			array_push($queryParams, $this->membershipPlanId);
+			array_push($queryParamsCount, $this->membershipPlanId);
+		}
+		
+		// Date d'expiration
+		if ($this->expirationDateStart !== null) { // Début
+			$queryCountGeneratedPasses .= " AND date_end_code_active >= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.date_end_code_active >= %s ";
+			array_push($queryParams, $this->expirationDateStart);
+			array_push($queryParamsCount, $this->expirationDateStart);
+		}
+		if ($this->expirationDateEnd !== null) { // Fin
+			$expirationDateEnd = DateTime::createFromFormat('Y-m-d', $this->expirationDateEnd);
+			$expirationDateEnd->modify('+1 day');
+			$expirationDateEnd->modify('-1 second');
+			
+			$queryCountGeneratedPasses .= " AND date_end_code_active <= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.date_end_code_active <= %s ";
+			array_push($queryParams, $expirationDateEnd->format('Y-m-d'));
+			array_push($queryParamsCount, $expirationDateEnd->format('Y-m-d'));
+		}
+		
+		// Date d'activation
+		if ($this->updatedAtStart !== null) { // Début
+			$queryCountGeneratedPasses .= " AND updated_at >= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.updated_at >= %s ";
+			array_push($queryParams, $this->updatedAtStart);
+			array_push($queryParamsCount, $this->updatedAtStart);
+		}
+		if ($this->updatedAtEnd !== null) { // Fin
+			$updatedAtEnd = DateTime::createFromFormat('Y-m-d', $this->updatedAtEnd);
+			$updatedAtEnd->modify('+1 day');
+			$updatedAtEnd->modify('-1 second');
+			
+			$queryCountGeneratedPasses .= " AND updated_at <= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.updated_at <= %s ";
+			array_push($queryParams, $updatedAtEnd->format('Y-m-d'));
+			array_push($queryParamsCount, $updatedAtEnd->format('Y-m-d'));
+		}
+		
+		// Date de création
+		if ($this->createdAtStart !== null) { // Début
+			$queryCountGeneratedPasses .= " AND created_at >= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.created_at >= %s ";
+			array_push($queryParams, $this->createdAtStart);
+			array_push($queryParamsCount, $this->createdAtStart);
+		}
+		if ($this->createdAtEnd !== null) { // Fin
+			$createdAtEnd = DateTime::createFromFormat('Y-m-d', $this->createdAtEnd);
+			$createdAtEnd->modify('+1 day');
+			$createdAtEnd->modify('-1 second');
+			
+			$queryCountGeneratedPasses .= " AND created_at <= %s ";
+			$querySelectGeneratedPassesSearch .= "AND dbp.created_at <= %s ";
+			array_push($queryParams, $createdAtEnd->format('Y-m-d'));
+			array_push($queryParamsCount, $createdAtEnd->format('Y-m-d'));
+		}
+		
+		
+		
+		$this->nbPass = $wpdb->get_var($wpdb->prepare($queryCountGeneratedPasses, $queryParamsCount));
+		
+		// On définit l'offset pour la pagination
 		$min = ($numPage - 1) * $this->nbItemsPerPage;
-		$max = $this->nbItemsPerPage;
+		// $max = $this->nbItemsPerPage;
+		
 		
 		$querySelectGeneratedPasses = "";
 		$querySelectGeneratedPasses .= "SELECT dbp.id, dbp.membership_plan, dbp.user_id, dbp.code, dbp.date_end_code_active, dbp.created_at, dbp.updated_at, u.ID as id_user, u.user_email, u.display_name, p.ID AS id_post, p.post_title, p.post_name ";
 		$querySelectGeneratedPasses .= "FROM $tableDeBamPass dbp ";
 		$querySelectGeneratedPasses .= "LEFT JOIN $tableUsers u ON dbp.user_id = u.ID ";
 		$querySelectGeneratedPasses .= "LEFT JOIN $tablePosts p ON dbp.membership_plan = p.ID ";
+		
+		// Recherche
+		if ($querySelectGeneratedPassesSearch != "") {
+			$querySelectGeneratedPasses .= $querySelectGeneratedPassesSearch;
+		}
 		
 		// On veut ordonner notre tableau sur une colonne
 		if ($this->orderColumn !== null && ($this->orderDirection == "ASC" || $this->orderDirection == "DESC")) {
@@ -107,8 +210,9 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		
 		$querySelectGeneratedPasses .= "LIMIT %d, %d";
 		
-		// $this->items = $wpdb->query($wpdb->prepare($querySelectGeneratedPasses, array($min, $max)));
-		return $wpdb->get_results($wpdb->prepare($querySelectGeneratedPasses, $min, $max));
+		array_push($queryParams, $min, $this->nbItemsPerPage);
+		
+		return $wpdb->get_results($wpdb->prepare($querySelectGeneratedPasses, $queryParams));
 	}
 	
 	
@@ -196,5 +300,47 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	{
 		$this->orderColumn = $column;
 		$this->orderDirection = strtoupper($direction);
+	}
+	
+	// Statut des pass
+	public function setPassStatus($status)
+	{
+		$this->passStatus = $status;
+	}
+	
+	// Membership Plan
+	public function setMembershipPlan($membershipPlan)
+	{
+		$this->membershipPlanId = $membershipPlan;
+	}
+	
+	// Date d'expiration
+	public function setExpirationDateStart($expirationDateStart)
+	{
+		$this->expirationDateStart = $expirationDateStart;
+	}
+	public function setExpirationDateEnd($expirationDateEnd)
+	{
+		$this->expirationDateEnd = $expirationDateEnd;
+	}
+	
+	// Date de création
+	public function setCreatedAtStart($createdAtStart)
+	{
+		$this->createdAtStart = $createdAtStart;
+	}
+	public function setCreatedAtEnd($createdAtEnd)
+	{
+		$this->createdAtEnd = $createdAtEnd;
+	}
+	
+	// Date de mise à jour
+	public function setUpdatedAtStart($updatedAtStart)
+	{
+		$this->updatedAtStart = $updatedAtStart;
+	}
+	public function setUpdatedAtEnd($updatedAtEnd)
+	{
+		$this->updatedAtEnd = $updatedAtEnd;
 	}
 }

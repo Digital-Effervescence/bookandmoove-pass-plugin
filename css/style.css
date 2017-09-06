@@ -116,6 +116,21 @@
 /* Voir pass */
 .wp-list-table .column-code {font-family: inherit; font-size: 14px;}
 
+.search-box {display: -webkit-flex; display: flex; -webkit-justify-content: flex-end; justify-content: flex-end; -webkit-align-items: flex-start; align-items: flex-start; float: right; margin: 15px 0 10px 0;}
+.search-box .search-field-container {margin-right: 10px;}
+.search-box .search-field-container .search-field-container-sub {display: inline-block;}
+.search-box .search-field-container label {display: block;}
+
+.search-box fieldset {border: 1px dotted #333333; border-radius: 3px; padding: 8px;}
+.search-box fieldset legend {}
+
+.search-box .radio-container {}
+.search-box .radio-container input {margin: 0px;}
+.search-box .radio-container label {display: inline-block; margin: 0 8px 0 0;}
+.search-box .radio-container label:last-child {margin-right: 0px;}
+
+.search-box input[type='submit'] {align-self: flex-end;}
+
 
 
 

@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-05 15:05+0200\n"
-"PO-Revision-Date: 2017-09-05 15:09+0200\n"
+"POT-Creation-Date: 2017-09-06 14:36+0200\n"
+"PO-Revision-Date: 2017-09-06 14:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -15,8 +15,8 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;"
-"_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
+"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 2.0.3\n"
 "X-Poedit-SearchPath-0: .\n"
@@ -44,81 +44,82 @@ msgstr "Erreur lors de l'activation du pass"
 msgid "Activate my code"
 msgstr "Activer mon code"
 
-#: de-bam-pass.php:546
+#: de-bam-pass.php:552
 msgid "Pass generator"
 msgstr "Générateur de pass"
 
-#: de-bam-pass.php:548
+#: de-bam-pass.php:554
 msgid "Pass viewer"
 msgstr "Voir les pass"
 
-#: de-bam-pass.php:555
+#: de-bam-pass.php:561
 msgid "You are not allowed to access this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
-#: de-bam-pass.php:571 de-bam-pass.php:586 de-bam-pass.php:602
+#: de-bam-pass.php:577 de-bam-pass.php:592 de-bam-pass.php:608
 msgid "Is required"
 msgstr "Est requis"
 
-#: de-bam-pass.php:578
+#: de-bam-pass.php:584
 msgid "Is not a valid membership plan"
 msgstr "N'est pas un membership plan valide"
 
-#: de-bam-pass.php:594
+#: de-bam-pass.php:600
 msgid "Must be a valid date"
 msgstr "Doit être une date valide"
 
-#: de-bam-pass.php:607
+#: de-bam-pass.php:613
 msgid "Must be a number"
 msgstr "Doit être un nombre entier"
 
-#: de-bam-pass.php:612
+#: de-bam-pass.php:618
 #, php-format
 msgid "Must be less than or equal to %d"
 msgstr "Doit être inférieur ou égal à %d"
 
-#: de-bam-pass.php:617
+#: de-bam-pass.php:623
 #, php-format
 msgid "Must be greater than or equal to %d"
 msgstr "Doit être supérieur ou égal à %d"
 
-#: de-bam-pass.php:658
+#: de-bam-pass.php:664
 #, php-format
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:29
+#: de-bam-pass.php:705 inc/class-de-list-table.php:224
 msgid "Code"
 msgstr "Code"
 
-#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:32
+#: de-bam-pass.php:705 inc/class-de-list-table.php:227
+#: templates/admin/page-passes-generated.php:48
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: de-bam-pass.php:699 inc/class-wp-list-table-de.php:31
+#: de-bam-pass.php:705 inc/class-de-list-table.php:226
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
-#: de-bam-pass.php:754
+#: de-bam-pass.php:760
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
 
-#: de-bam-pass.php:755
+#: de-bam-pass.php:761
 msgid "CSV file :"
 msgstr "Fichier CSV :"
 
-#: inc/class-wp-list-table-de.php:30
+#: inc/class-de-list-table.php:225
 msgid "User"
 msgstr "Utilisateur"
 
-#: inc/class-wp-list-table-de.php:33
-msgid "Creation date"
-msgstr "Date de création"
-
-#: inc/class-wp-list-table-de.php:34
+#: inc/class-de-list-table.php:228 templates/admin/page-passes-generated.php:65
 msgid "Activation date"
 msgstr "Date d'activation"
+
+#: inc/class-de-list-table.php:229 templates/admin/page-passes-generated.php:82
+msgid "Creation date"
+msgstr "Date de création"
 
 #: inc/class-wp-list-table.php:162
 msgid "List View"
@@ -241,6 +242,7 @@ msgid "Activated passes"
 msgstr "Pass activés"
 
 #: templates/admin/page-passes-activated.php:4
+#: templates/admin/page-passes-generated.php:28
 msgid "Passes activated"
 msgstr "Pass activés"
 
@@ -248,28 +250,61 @@ msgstr "Pass activés"
 msgid "Passes generated"
 msgstr "Pass générés"
 
-#: templates/admin/page-passes-generator.php:2
-msgid "Pass generation"
-msgstr "Génération de pass"
+#: templates/admin/page-passes-generated.php:22
+msgid "Passes status"
+msgstr "Statut des pass"
 
+#: templates/admin/page-passes-generated.php:25
+msgid "Not specified"
+msgstr "Non spécifié"
+
+#: templates/admin/page-passes-generated.php:31
+msgid "Passes not activated"
+msgstr "Pass non activés"
+
+#: templates/admin/page-passes-generated.php:37
 #: templates/admin/page-passes-generator.php:22
 msgid "Plan type"
 msgstr "Type de plan"
 
-#: templates/admin/page-passes-generator.php:36
+#: templates/admin/page-passes-generated.php:39
+msgid "Select"
+msgstr "Sélectionner"
+
+#: templates/admin/page-passes-generated.php:52
+#: templates/admin/page-passes-generated.php:69
+#: templates/admin/page-passes-generated.php:86
+msgid "Start"
+msgstr "Début"
+
+#: templates/admin/page-passes-generated.php:58
+#: templates/admin/page-passes-generated.php:75
+#: templates/admin/page-passes-generated.php:92
+msgid "End"
+msgstr "Fin"
+
+#: templates/admin/page-passes-generated.php:97
+msgid "Passes search"
+msgstr "Recherche de pass"
+
+#: templates/admin/page-passes-generator.php:2
+msgid "Pass generation"
+msgstr "Génération de pass"
+
+#: templates/admin/page-passes-generator.php:35
 msgid "Codes expiration date"
 msgstr "Date d'expiration des codes"
 
-#: templates/admin/page-passes-generator.php:45
+#: templates/admin/page-passes-generator.php:44
 msgid "Pass number"
 msgstr "Nombre de pass"
 
-#: templates/admin/page-passes-generator.php:46
+#: templates/admin/page-passes-generator.php:45
 #, php-format
 msgid "Max %d"
 msgstr "%d maximum"
 
-#: templates/admin/page-passes-generator.php:54
+#: templates/admin/page-passes-generator.php:53
 msgid "Generate"
 msgstr "Générer"
 
@@ -348,6 +383,24 @@ msgstr "Vous devez d’abord en créer un pour activer votre code."
 #: templates/popin-registration.php:30
 msgid "Create an acount"
 msgstr "Créer un compte"
+
+#~ msgid "Expiration date (start)"
+#~ msgstr "Date d'expiration (début)"
+
+#~ msgid "Expiration date (end)"
+#~ msgstr "Date d'expiration (fin)"
+
+#~ msgid "Activation date (start)"
+#~ msgstr "Date d'activation (début)"
+
+#~ msgid "Activation date (end)"
+#~ msgstr "Date d'activation (fin)"
+
+#~ msgid "Creation date (start)"
+#~ msgstr "Date de création (début)"
+
+#~ msgid "Creation date (end)"
+#~ msgstr "Date de création (fin)"
 
 #, fuzzy
 #~| msgid "Generated pass"

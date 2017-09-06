@@ -20,7 +20,6 @@
 	<form id="form-pass-generation" method="post" action="">
 		<p class="form-field">
 			<label for="pass-generation-plan-type"><?php _e("Plan type", "debampass"); ?></label>
-			
 			<select name="pass-generation-plan-type" id="pass-generation-plan-type" class="short">
 				<?php foreach ($membershipPlans as $aMembershipPlan): ?>
 					<option value="<?php echo $aMembershipPlan->id; ?>"><?php echo $aMembershipPlan->name; ?></option>
@@ -34,7 +33,7 @@
 		
 		<p class="form-field">
 			<label for="pass-generation-codes-expiration-date"><?php _e("Codes expiration date", "debampass"); ?></label>
-			<input type="text" name="pass-generation-codes-expiration-date" id="pass-generation-codes-expiration-date" class="short" required="required" placeholder="YYYY-MM-JJ" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+			<input type="text" name="pass-generation-codes-expiration-date" id="pass-generation-codes-expiration-date" class="short jquery-datepicker" required="required" placeholder="YYYY-MM-JJ" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
 			
 			<?php if (isset($errors['pass-generation-codes-expiration-date'])): ?>
 				<span class="errors"><?php echo $errors['pass-generation-codes-expiration-date']['message']; ?></span>

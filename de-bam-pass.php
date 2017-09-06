@@ -504,7 +504,13 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			// Chargement des css et js dans l'admin
 			public function loadStylesScriptsAdmin()
 			{
+				wp_enqueue_script('jquery-ui-datepicker');
+				wp_enqueue_script('de_bam_script_admin', plugin_dir_url(__FILE__) .'js/script.js', array('jquery'), '1.0', true);
+				
 				wp_enqueue_style('de_bam_style_admin', plugin_dir_url(__FILE__) .'css/style.css', array(), false, 'screen');
+				
+				wp_register_style('jquery-ui', 'http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
+				wp_enqueue_style('jquery-ui');
 			}
 			
 			public function loginRedirect($redirect_to, $request, $user)
@@ -801,15 +807,50 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					exit;
 				}
 				
+				// Page
 				if (isset($_GET['paged'])) {
 					$generatedPassListTable->setCurrentNumPage($_GET['paged']);
 				}
 				
+				// Tri
 				if (isset($_GET['orderby']) && isset($_GET['order'])) {
 					$generatedPassListTable->setOrder($_GET['orderby'], $_GET['order']);
 				}
 				
+				
+				// Recherche
+				if (isset($_GET['search-pass-status']) && trim($_GET['search-pass-status']) != "" && trim($_GET['search-pass-status']) != "-1") { // Statut des pass
+					$generatedPassListTable->setPassStatus($_GET['search-pass-status']);
+				}
+				
+				if (isset($_GET['search-plan-type']) && trim($_GET['search-plan-type']) != "") { // Membership Plan
+					$generatedPassListTable->setMembershipPlan($_GET['search-plan-type']);
+				}
+				
+				if (isset($_GET['search-expiration-date-start']) && trim($_GET['search-expiration-date-start']) != "") { // Date d'expiration (début)
+					$generatedPassListTable->setExpirationDateStart($_GET['search-expiration-date-start']);
+				}
+				if (isset($_GET['search-expiration-date-end']) && trim($_GET['search-expiration-date-end']) != "") { // Date d'expiration (fin)
+					$generatedPassListTable->setExpirationDateEnd($_GET['search-expiration-date-end']);
+				}
+				
+				if (isset($_GET['search-updated-at-start']) && trim($_GET['search-updated-at-start']) != "") { // Date d'activation (début)
+					$generatedPassListTable->setUpdatedAtStart($_GET['search-updated-at-start']);
+				}
+				if (isset($_GET['search-updated-at-end']) && trim($_GET['search-updated-at-end']) != "") { // Date d'activation (fin)
+					$generatedPassListTable->setUpdatedAtEnd($_GET['search-updated-at-end']);
+				}
+				
+				if (isset($_GET['search-created-at-start']) && trim($_GET['search-created-at-start']) != "") { // Date de création (début)
+					$generatedPassListTable->setCreatedAtStart($_GET['search-created-at-start']);
+				}
+				if (isset($_GET['search-created-at-end']) && trim($_GET['search-created-at-end']) != "") { // Date de création (fin)
+					$generatedPassListTable->setCreatedAtEnd($_GET['search-created-at-end']);
+				}
+				
 				$generatedPassListTable->prepare_items();
+				
+				$membershipPlans = wc_memberships_get_membership_plans();
 				
 				include "templates/admin/page-passes-generated.php";
 			}
