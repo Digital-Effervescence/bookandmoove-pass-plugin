@@ -8,6 +8,9 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	private $currentNumPage = 1;
 	private $nbItemsPerPage = 10;
 	
+	private $orderColumn = null;
+	private $orderDirection = "ASC";
+	
 	private $nbPass;
 	
 	public $items;
@@ -18,11 +21,32 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		die( 'function WP_List_Table::ajax_user_can() must be over-ridden in a sub-class.' );
 	}*/
 	
-	public function setCurrentNumPage($numPage)
+	
+
+	/**
+	 * Prepares the list of items for displaying.
+	 * @uses WP_List_Table::set_pagination_args()
+	 */
+	public function prepare_items()
 	{
-		if ($numPage > 0) {
-			$this->currentNumPage = $numPage;
-		}
+		$columns = $this->get_columns();
+		$hidden = array();
+		$sortable = $this->get_sortable_columns();
+		$this->_column_headers = array($columns, $hidden, $sortable);
+		
+		$this->items = $this->retrieveGeneratedPasses($this->currentNumPage);
+		
+		$this->set_pagination_args(
+			array(
+				'total_items' => $this->nbPass,
+				'per_page' => $this->nbItemsPerPage,
+			)
+		);
+
+		
+		// echo "<pre>";
+		// print_r($this->items);
+		// echo "</pre>";
 	}
 	
 	public function retrieveGeneratedPasses($numPage = 1)
@@ -49,36 +73,57 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		$querySelectGeneratedPasses .= "FROM $tableDeBamPass dbp ";
 		$querySelectGeneratedPasses .= "LEFT JOIN $tableUsers u ON dbp.user_id = u.ID ";
 		$querySelectGeneratedPasses .= "LEFT JOIN $tablePosts p ON dbp.membership_plan = p.ID ";
+		
+		// On veut ordonner notre tableau sur une colonne
+		if ($this->orderColumn !== null && ($this->orderDirection == "ASC" || $this->orderDirection == "DESC")) {
+			switch ($this->orderColumn) {
+				case 'code':
+					$querySelectGeneratedPasses .= "ORDER BY dbp.code ";
+					break;
+				
+				case 'membership_plan_name':
+					$querySelectGeneratedPasses .= "ORDER BY p.post_title ";
+					break;
+				
+				case 'date_end_code_active':
+					$querySelectGeneratedPasses .= "ORDER BY dbp.date_end_code_active ";
+					break;
+				
+				case 'updated_at':
+					$querySelectGeneratedPasses .= "ORDER BY dbp.updated_at ";
+					break;
+				
+				case 'created_at':
+					$querySelectGeneratedPasses .= "ORDER BY dbp.created_at ";
+					break;
+				
+				default: // Au cas où
+					$querySelectGeneratedPasses .= "ORDER BY dbp.id ";
+					break;
+			}
+			
+			$querySelectGeneratedPasses .= $this->orderDirection ." "; // Sens
+		}
+		
 		$querySelectGeneratedPasses .= "LIMIT %d, %d";
 		
 		// $this->items = $wpdb->query($wpdb->prepare($querySelectGeneratedPasses, array($min, $max)));
 		return $wpdb->get_results($wpdb->prepare($querySelectGeneratedPasses, $min, $max));
 	}
-
-	/**
-	 * Prepares the list of items for displaying.
-	 * @uses WP_List_Table::set_pagination_args()
-	 */
-	public function prepare_items()
+	
+	
+	public function get_sortable_columns()
 	{
-		$columns = $this->get_columns();
-		$hidden = array();
-		$sortable = array();
-		$this->_column_headers = array($columns, $hidden, $sortable);
-		
-		$this->items = $this->retrieveGeneratedPasses($this->currentNumPage);
-		
-		$this->set_pagination_args(
-			array(
-				'total_items' => $this->nbPass,
-				'per_page' => $this->nbItemsPerPage,
-			)
+		$sortableColumns = array(
+			'code' => array('code', false),
+			// 'user' => array('user', false),
+			'membership_plan_name' => array('membership_plan_name', false),
+			'date_end_code_active' => array('date_end_code_active', false),
+			'updated_at' => array('updated_at', false),
+			'created_at' => array('created_at', false),
 		);
-
 		
-		// echo "<pre>";
-		// print_r($this->items);
-		// echo "</pre>";
+		return $sortableColumns;
 	}
 
 	/**
@@ -137,5 +182,19 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 				return $item->$columnName;
 				break;
 		}
+	}
+	
+	
+	public function setCurrentNumPage($numPage)
+	{
+		if ($numPage > 0) {
+			$this->currentNumPage = $numPage;
+		}
+	}
+	
+	public function setOrder($column, $direction)
+	{
+		$this->orderColumn = $column;
+		$this->orderDirection = strtoupper($direction);
 	}
 }

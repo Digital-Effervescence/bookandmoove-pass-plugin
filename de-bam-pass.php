@@ -787,11 +787,29 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			{
 				$generatedPassListTable = new DE_List_Table_Pass_Generated();
 				
+				$doAction = $generatedPassListTable->current_action();
+				
+				// echo "action : ";
+				// echo "<pre>";
+				// print_r($doAction);
+				// echo "</pre>";
+				
+				if ($doAction) {
+					
+				} elseif (!empty($_REQUEST['_wp_http_referer'])) {
+					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI'])));
+					exit;
+				}
+				
 				if (isset($_GET['paged'])) {
 					$generatedPassListTable->setCurrentNumPage($_GET['paged']);
 				}
 				
-				$generatedPassListTable->prepare_items(); 
+				if (isset($_GET['orderby']) && isset($_GET['order'])) {
+					$generatedPassListTable->setOrder($_GET['orderby'], $_GET['order']);
+				}
+				
+				$generatedPassListTable->prepare_items();
 				
 				include "templates/admin/page-passes-generated.php";
 			}
