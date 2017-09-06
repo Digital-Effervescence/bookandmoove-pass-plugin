@@ -104,7 +104,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				  membership_plan BIGINT(20) NOT NULL,
 				  user_id BIGINT(20),
 				  code VARCHAR(9) NOT NULL,
-				  date_end_code_active DATETIME NOT NULL,
+				  date_end_code_active DATE NOT NULL,
 				  created_at DATETIME NOT NULL,
 				  updated_at DATETIME,
 				  PRIMARY KEY  (id)
