@@ -107,7 +107,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				  date_end_code_active DATE NOT NULL,
 				  created_at DATETIME NOT NULL,
 				  updated_at DATETIME,
-				  PRIMARY KEY  (id)
+				  PRIMARY KEY  (id),
 				  KEY INDEX_CODE (code)
 				) $charsetCollate;";
 
