@@ -1,6 +1,8 @@
 <div id="debampass-generated-page" class="wrap">
 	<h1><?php _e("Passes generated", "debampass"); ?></h1>
 	
+	<?php include "elements/admin-notices.php"; ?>
+	
 	<form id="form-generated-passes" method="get">
 		<input type="hidden" name="page" value="<?php echo $_GET['page']; ?>" />
 		
@@ -97,5 +99,18 @@
 		</div>
 		
 		<?php $generatedPassListTable->display(); ?>
+		
+		<?php
+			$url = wp_unslash($_SERVER['REQUEST_URI']);
+			$query = parse_url($url, PHP_URL_QUERY);
+			
+			if ($query) {
+				$url .= '&action=download-csv';
+			} else {
+				$url .= '?action=download-csv';
+			}
+		?>
+		
+		<a href="<?php echo $url; ?>" class="button"><?php _e("Download data in CSV format", "debampass"); ?></a>
 	</form>
 </div>

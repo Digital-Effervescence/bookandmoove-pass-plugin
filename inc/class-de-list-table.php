@@ -188,10 +188,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 			array_push($this->queryParams, $this->expirationDateStart);
 		}
 		if ($this->expirationDateEnd !== null) { // Fin
-			// $expirationDateEnd = DateTime::createFromFormat('Y-m-d', $this->expirationDateEnd);
-			// $expirationDateEnd->modify('+1 day');
-			// $expirationDateEnd->modify('-1 second');
-			
 			$this->queryCountGeneratedPasses .= " AND date_end_code_active <= %s ";
 			$querySelectGeneratedPassesSearch .= "AND dbp.date_end_code_active <= %s ";
 			array_push($this->queryParamsCount, $this->expirationDateEnd);
@@ -206,14 +202,14 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 			array_push($this->queryParams, $this->updatedAtStart);
 		}
 		if ($this->updatedAtEnd !== null) { // Fin
-			// $updatedAtEnd = DateTime::createFromFormat('Y-m-d', $this->updatedAtEnd);
-			// $updatedAtEnd->modify('+1 day');
-			// $updatedAtEnd->modify('-1 second');
+			$updatedAtEnd = DateTime::createFromFormat('Y-m-d', $this->updatedAtEnd);
+			$updatedAtEnd->modify('+1 day');
+			$updatedAtEnd->modify('-1 second');
 			
 			$this->queryCountGeneratedPasses .= " AND updated_at <= %s ";
 			$querySelectGeneratedPassesSearch .= "AND dbp.updated_at <= %s ";
-			array_push($this->queryParamsCount, $this->updatedAtEnd);
-			array_push($this->queryParams, $this->updatedAtEnd);
+			array_push($this->queryParamsCount, $updatedAtEnd->format('Y-m-d'));
+			array_push($this->queryParams, $updatedAtEnd->format('Y-m-d'));
 		}
 		
 		// Date de création
@@ -224,14 +220,14 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 			array_push($this->queryParams, $this->createdAtStart);
 		}
 		if ($this->createdAtEnd !== null) { // Fin
-			// $createdAtEnd = DateTime::createFromFormat('Y-m-d', $this->createdAtEnd);
-			// $createdAtEnd->modify('+1 day');
-			// $createdAtEnd->modify('-1 second');
+			$createdAtEnd = DateTime::createFromFormat('Y-m-d', $this->createdAtEnd);
+			$createdAtEnd->modify('+1 day');
+			$createdAtEnd->modify('-1 second');
 			
 			$this->queryCountGeneratedPasses .= " AND created_at <= %s ";
 			$querySelectGeneratedPassesSearch .= "AND dbp.created_at <= %s ";
-			array_push($this->queryParamsCount, $this->createdAtEnd);
-			array_push($this->queryParams, $this->createdAtEnd);
+			array_push($this->queryParamsCount, $createdAtEnd->format('Y-m-d'));
+			array_push($this->queryParams, $createdAtEnd->format('Y-m-d'));
 		}
 		
 		
@@ -308,6 +304,25 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 				return $item->$columnName;
 				break;
 		}
+	}
+	
+	
+	public function getQueryCountGeneratedPasses()
+	{
+		return $this->queryCountGeneratedPasses;
+	}
+	public function getQuerySelectGeneratedPasses()
+	{
+		return $this->querySelectGeneratedPasses;
+	}
+	
+	public function getQueryParamsCount()
+	{
+		return $this->queryParamsCount;
+	}
+	public function getQueryParams()
+	{
+		return $this->queryParams;
 	}
 	
 	

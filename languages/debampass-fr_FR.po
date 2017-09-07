@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-06 16:44+0200\n"
-"PO-Revision-Date: 2017-09-06 16:46+0200\n"
+"POT-Creation-Date: 2017-09-07 15:42+0200\n"
+"PO-Revision-Date: 2017-09-07 15:42+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -22,41 +22,41 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 
-#: de-bam-pass.php:205
+#: de-bam-pass.php:239
 msgid "The entered code is incorrect"
 msgstr "Le code entré est incorrect"
 
-#: de-bam-pass.php:223 de-bam-pass.php:308 de-bam-pass.php:319
-#: de-bam-pass.php:357 de-bam-pass.php:366 de-bam-pass.php:409
-#: de-bam-pass.php:446 de-bam-pass.php:456 de-bam-pass.php:465
+#: de-bam-pass.php:257 de-bam-pass.php:342 de-bam-pass.php:353
+#: de-bam-pass.php:391 de-bam-pass.php:400 de-bam-pass.php:443
+#: de-bam-pass.php:480 de-bam-pass.php:490 de-bam-pass.php:499
 msgid "An error has occurred"
 msgstr "Une erreur est survenue"
 
-#: de-bam-pass.php:388
+#: de-bam-pass.php:422
 msgid "Pass activated"
 msgstr "Pass activé"
 
-#: de-bam-pass.php:404
+#: de-bam-pass.php:438
 msgid "Pass activation error"
 msgstr "Erreur lors de l'activation du pass"
 
-#: de-bam-pass.php:501
+#: de-bam-pass.php:535
 msgid "Activate my code"
 msgstr "Activer mon code"
 
-#: de-bam-pass.php:552
+#: de-bam-pass.php:586
 msgid "Pass generator"
 msgstr "Générateur de pass"
 
-#: de-bam-pass.php:554
+#: de-bam-pass.php:588
 msgid "Pass viewer"
 msgstr "Voir les pass"
 
-#: de-bam-pass.php:561
+#: de-bam-pass.php:595
 msgid "You are not allowed to access this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
-#: de-bam-pass.php:571
+#: de-bam-pass.php:605
 msgid ""
 "Unable to create the directory containing the CSV exports on the server. "
 "Please temporarily grant sufficient rights to the 'de-bam-pass' directory in "
@@ -66,70 +66,86 @@ msgstr ""
 "Veuillez donner temporairement les droits suffisants sur le répertoire 'de-"
 "bam-pass' dans 'wp-content/plugins/' puis rechargez la page."
 
-#: de-bam-pass.php:587 de-bam-pass.php:602 de-bam-pass.php:618
+#: de-bam-pass.php:621 de-bam-pass.php:636 de-bam-pass.php:652
 msgid "Is required"
 msgstr "Est requis"
 
-#: de-bam-pass.php:594
+#: de-bam-pass.php:628
 msgid "Is not a valid membership plan"
 msgstr "N'est pas un membership plan valide"
 
-#: de-bam-pass.php:610
+#: de-bam-pass.php:644
 msgid "Must be a valid date"
 msgstr "Doit être une date valide"
 
-#: de-bam-pass.php:623
+#: de-bam-pass.php:657
 msgid "Must be a number"
 msgstr "Doit être un nombre entier"
 
-#: de-bam-pass.php:628
+#: de-bam-pass.php:662
 #, php-format
 msgid "Must be less than or equal to %d"
 msgstr "Doit être inférieur ou égal à %d"
 
-#: de-bam-pass.php:633
+#: de-bam-pass.php:667
 #, php-format
 msgid "Must be greater than or equal to %d"
 msgstr "Doit être supérieur ou égal à %d"
 
-#: de-bam-pass.php:673
+#: de-bam-pass.php:707
 #, php-format
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:710 inc/class-de-list-table.php:242
+#: de-bam-pass.php:744 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:260
 msgid "Code"
 msgstr "Code"
 
-#: de-bam-pass.php:710 inc/class-de-list-table.php:245
-#: templates/admin/page-passes-generated.php:49
+#: de-bam-pass.php:744 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:263 templates/admin/page-passes-generated.php:49
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: de-bam-pass.php:710 inc/class-de-list-table.php:244
+#: de-bam-pass.php:744 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:262
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
-#: de-bam-pass.php:765
+#: de-bam-pass.php:799
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
 
-#: de-bam-pass.php:766
+#: de-bam-pass.php:800 de-bam-pass.php:943
 msgid "CSV file :"
 msgstr "Fichier CSV :"
 
-#: inc/class-de-list-table.php:243
-msgid "User"
-msgstr "Utilisateur"
+#: de-bam-pass.php:952
+msgid "An error occured while generating the CSV file"
+msgstr "Une erreur est survenue lors de la génération du fichier CSV"
 
-#: inc/class-de-list-table.php:246 templates/admin/page-passes-generated.php:66
+#: inc/class-de-csv-generator.php:24
+msgid "User Email"
+msgstr "E-mail de l'utilisateur"
+
+#: inc/class-de-csv-generator.php:24
+msgid "User display name"
+msgstr "Nom d'affichage de l'utilisateur"
+
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:264
+#: templates/admin/page-passes-generated.php:66
 msgid "Activation date"
 msgstr "Date d'activation"
 
-#: inc/class-de-list-table.php:247 templates/admin/page-passes-generated.php:83
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:265
+#: templates/admin/page-passes-generated.php:83
 msgid "Creation date"
 msgstr "Date de création"
+
+#: inc/class-de-list-table.php:261
+msgid "User"
+msgstr "Utilisateur"
 
 #: inc/class-wp-list-table.php:162
 msgid "List View"
@@ -243,20 +259,7 @@ msgstr "Dernière page"
 msgid "Select All"
 msgstr "Tout sélectionner"
 
-#: templates/admin/elements/tabs-pass-viewer.php:2
-msgid "Generated pass"
-msgstr "Pass générés"
-
-#: templates/admin/elements/tabs-pass-viewer.php:3
-msgid "Activated passes"
-msgstr "Pass activés"
-
-#: templates/admin/page-passes-activated.php:4
-#: templates/admin/page-passes-generated.php:29
-msgid "Passes activated"
-msgstr "Pass activés"
-
-#: templates/admin/page-passes-generated.php:4
+#: templates/admin/page-passes-generated.php:2
 msgid "Passes generated"
 msgstr "Pass générés"
 
@@ -267,6 +270,10 @@ msgstr "Statut des pass"
 #: templates/admin/page-passes-generated.php:26
 msgid "Not specified"
 msgstr "Non spécifié"
+
+#: templates/admin/page-passes-generated.php:29
+msgid "Passes activated"
+msgstr "Pass activés"
 
 #: templates/admin/page-passes-generated.php:32
 msgid "Passes not activated"
@@ -296,6 +303,10 @@ msgstr "Fin"
 #: templates/admin/page-passes-generated.php:98
 msgid "Passes search"
 msgstr "Recherche de pass"
+
+#: templates/admin/page-passes-generated.php:114
+msgid "Download data in CSV format"
+msgstr "Télécharger les données au format CSV"
 
 #: templates/admin/page-passes-generator.php:2
 msgid "Pass generation"
@@ -393,6 +404,12 @@ msgstr "Vous devez d’abord en créer un pour activer votre code."
 #: templates/popin-registration.php:30
 msgid "Create an acount"
 msgstr "Créer un compte"
+
+#~ msgid "Generated pass"
+#~ msgstr "Pass générés"
+
+#~ msgid "Activated passes"
+#~ msgstr "Pass activés"
 
 #~ msgid "Expiration date (start)"
 #~ msgstr "Date d'expiration (début)"

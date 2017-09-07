@@ -9,7 +9,7 @@
 
 // Exit if accessed directly
 if (!defined('ABSPATH')) {
-	exit;
+	exit();
 }
 
 if (!defined('DEBAMPASS')) {
@@ -20,6 +20,11 @@ require dirname(DEBAMPASS) .'/inc/Gamajo_Template_Loader.php';
 require dirname(DEBAMPASS) .'/inc/PW_Template_Loader.php';
 
 require dirname(DEBAMPASS) .'/inc/class-de-list-table.php';
+// require dirname(DEBAMPASS) .'/inc/de-async-task.php';
+// require dirname(DEBAMPASS) .'/inc/BackgroundProcess.php';
+require dirname(DEBAMPASS) .'/inc/class-de-csv-generator.php';
+
+require dirname(DEBAMPASS) .'/inc/Tools.php';
 
 
 // Seulement si les plugins 'WooCommerce' et 'WooCommerce Membership' sont actifs
@@ -76,11 +81,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				add_action('wp_ajax_nopriv_messageValidationPass', array($this, 'messageValidationPass'));
 				
 				
-				// AJAX TMP
-				// add_action('wp_ajax_tmpPassGenerator', array($this, 'tmpPassGenerator'));
-				// add_action('wp_ajax_nopriv_tmpPassGenerator', array($this, 'tmpPassGenerator'));
-				
-				
 				add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
 				
 				
@@ -88,6 +88,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				// Admin
 				add_action('admin_menu', array($this, 'deBamPassAdminMenu'));
 			}
+			
 			
 			// Installation du plugin
 			public function install()
@@ -123,42 +124,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 			}
 			
-			public function wpLoaded()
-			{
-				global $woocommerce;
-				
-				
-				// $orderId = $woocommerce->checkout->create_order();
-				
-				// echo "yo : ". $orderId;
-				
-				// echo "<pre>";
-				// print_r($meta);
-				// echo "</pre>";
-			}
-			
-			public function customPrice($cart)
-			{
-				global $woocommerce;
-				
-				// foreach ($woocommerce->cart->get_cart() as $key => $value) {
-				foreach ($cart->get_cart() as $aProductInCart) {
-					// $value['data']->set_price(0);
-					// $aProductInCart['line_total'] = 40;
-					$aProductInCart['data']->set_price(0);
-					// echo get_class($aProductInCart['data']);
-					// $aProductInCart['data']->virtual = "yes";
-					
-					// echo "<pre>";
-					// print_r($aProductInCart);
-					// echo "</pre>";
-				}
-				
-				// $cart->add_fee('test_fee', 3);
-				
-				// $woocommerce->shipping->reset_shipping();
-			}
-			
 			public function addCartFee()
 			{
 				global $woocommerce;
@@ -190,7 +155,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				global $wpdb;
 				
 				if (isset($_POST['enter-code-pass-code'])) {
-					// $tableName = $wpdb->prefix ."debampass";
+					$tableName = $wpdb->prefix ."debampass";
 					
 					$queryGetPass = "";
 					$queryGetPass .= "SELECT id ";
@@ -226,7 +191,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					);
 				}
 				
-				exit;
+				exit();
 			}
 			
 			private function getCodePassEntryQuery()
@@ -268,11 +233,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				
 				$resultPass = $wpdb->get_results($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['code-pass'])); // On récupère l'entrée en BDD du pass dont le code est passé en POST
-				// $resultPass = $wpdb->get_results($wpdb->prepare($this->getCodePassEntryQuery(), "123654987")); // On récupère l'entrée en BDD du pass dont le code est passé en POST
-				// echo "<pre>";
-				// print_r($resultPass);
-				// echo "</pre>";
-				// exit;
+				
 				if (count($resultPass) == 1) {
 					// On enregistre l'état du panier de l'utilisateur
 					if (!session_id()) {
@@ -284,7 +245,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$woocommerce->cart->empty_cart(); // On vide le panier de l'utilisateur
 					
 					$metaMembershipPlan = get_post_meta($resultPass[0]->membership_plan, '_product_ids');
-					// $woocommerce->cart->add_to_cart(12566);
 					
 					if (isset($metaMembershipPlan[0]) && isset($metaMembershipPlan[0][0])) {
 						$woocommerce->cart->add_to_cart($metaMembershipPlan[0][0]);
@@ -311,7 +271,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						);
 					}
 					
-					exit;
+					exit();
 				} else {
 					echo json_encode(
 						array(
@@ -320,12 +280,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							'log' => "Aucun ou plus de 1 résultat.",
 						)
 					);
-					exit;
+					exit();
 				}
-				
-				// echo "<pre>";
-				// print_r($resultPass);
-				// echo "</pre>";
 			}
 			
 			public function validateCheckoutForm()
@@ -346,10 +302,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						
 						$woocommerce->checkout->must_create_account = true; // Un utilisateur non inscrit sera inscrit à l'issue de la commande
 						$checkoutResults = $woocommerce->checkout->process_checkout();
-						
-						// echo "<pre>";
-						// print_r($checkoutResults);
-						// echo "</pre>";
 					} else {
 						echo json_encode(
 							array(
@@ -369,11 +321,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					);
 				}
 				
-				// echo json_encode($checkoutResults);
-				// echo "<pre>";
-				// print_r($checkoutResults);
-				// echo "</pre>";
-				exit;
+				exit();
 			}
 			
 			// Finalisation de l'activation du pass
@@ -468,7 +416,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					);
 				}
 				
-				exit;
+				exit();
 			}
 			
 			// Affichage de la popin affichant le message de confirmation de l'activation du pass
@@ -519,39 +467,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			}
 			
 			
-			// Gestion du formulaire de commande d'un Pass
-			/*public function woocommerCheckoutForm($fields)
-			{
-				echo "<pre>";
-				print_r($fields);
-				echo "</pre>";
-				
-				$fields['order']['de_bam_pass']['type'] = "text";
-				$fields['order']['de_bam_pass']['label'] = __("Activate my BookandMoove code", "debampass");
-				$fields['order']['de_bam_pass']['placeholder'] = __("Enter your card code", "debampass");
-				
-				return $fields;
-			}*/
-			
-			/*public function woocommerCheckoutFormFieldProcess()
-			{
-				// global $woocommerce;
-				
-				// $checkout_url = $woocommerce->cart->get_checkout_url();
-				
-				// echo "url : ". $checkout_url;
-				// wc_add_notice(__('Please enter something into this new shiny field.'), 'error');
-				// echo "test ma gueule : ". $_POST['de_bam_pass'];
-				// die();
-			}*/
-			
-			
 			
 			public function deBamPassAdminMenu()
 			{
 				add_submenu_page("woocommerce", __("Pass generator", "debampass"), __("Pass generator", "debampass"), "manage_options", "woocommerce-debampass-generator", array($this, "passGenerator"));
 				
-				add_submenu_page("woocommerce", __("Pass viewer", "debampass"), __("Pass viewer", "debampass"), "manage_options", "woocommerce-debampass-viewer", array($this, "passGenerated"));
+				add_submenu_page("woocommerce", __("Pass viewer", "debampass"), __("Pass viewer", "debampass"), "manage_options", "woocommerce-debampass-viewer", array($this, "passesGenerated"));
 			}
 			
 			// Page admin de génération de pass
@@ -571,7 +492,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					array_push($generationErrors, __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"));
 				}
 				
-				$nbminPass = 1;
+				$nbMinPass = 1;
 				$nbMaxPass = 5000;
 				$membershipPlans = wc_memberships_get_membership_plans();
 				
@@ -628,9 +549,9 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 									'message' => sprintf(__("Must be less than or equal to %d", "debampass"), $nbMaxPass),
 								);
 							} else {
-								if ($_POST['pass-generation-pass-number'] < $nbminPass) { // Trop petit
+								if ($_POST['pass-generation-pass-number'] < $nbMinPass) { // Trop petit
 									$errors['pass-generation-pass-number'] = array(
-										'message' => sprintf(__("Must be greater than or equal to %d", "debampass"), $nbminPass),
+										'message' => sprintf(__("Must be greater than or equal to %d", "debampass"), $nbMinPass),
 									);
 								}
 							}
@@ -769,36 +690,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 				
 				include "templates/admin/page-passes-generator.php";
-				
-				// echo "<pre>";
-				// print_r($membershipPlan);
-				// echo "</pre>";
 			}
 			
 			// Page admin de visualisation des pass générés
-			public function passGenerated($activeTab)
+			public function passesGenerated()
 			{
-				// header('Content-Type: application/csv');
-				// header('Content-Disposition: attachment; filename=example.csv');
-				// header('Pragma: no-cache');
-				// readfile("exports/2017_09_06-14_47_59-pass_generation.csv");
-				// exit;
-				
 				$generatedPassListTable = new DE_List_Table_Pass_Generated();
 				
 				$doAction = $generatedPassListTable->current_action();
-				
-				// echo "action : ";
-				// echo "<pre>";
-				// print_r($doAction);
-				// echo "</pre>";
-				
-				if ($doAction) {
-					
-				} elseif (!empty($_REQUEST['_wp_http_referer'])) {
-					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI'])));
-					exit;
-				}
 				
 				// Page
 				if (isset($_GET['paged'])) {
@@ -841,17 +740,71 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					$generatedPassListTable->setCreatedAtEnd($_GET['search-created-at-end']);
 				}
 				
+				if ($doAction) {
+					// Génération d'un CSV
+					if ($doAction == 'download-csv') {
+						$generatedPassListTable->initializeQueries(); // On initialise les requêtes permettant de retourner les résultats (avec les paramètres courants) et leur nombre
+						
+						// On récupère la requête retournant les résultats ainsi que ses paramètres
+						$querySelectGeneratedPasses = $generatedPassListTable->getQuerySelectGeneratedPasses();
+						$queryParams = $generatedPassListTable->getQueryParams();
+						
+						// On veut maintenant générer un CSV contenant ces résultats
+						$directoryName = "/exports/";
+						$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
+						
+						$fileName = date('Y') ."_". date('m') ."_". date('d') ."-". date('H') ."_". date('i') ."_". date('s') ."-pass_export.csv";
+						$filePath = $uploadExportsPath . $fileName;
+						
+						$csvGenerator = new DE_CSV_Generator($querySelectGeneratedPasses, $queryParams);
+						$csvGenerator->setBatchSize(10);
+						
+						if (!session_id()) {
+							session_start();
+						}
+						if (!isset($_SESSION['adminNotices'])) {
+							$_SESSION['adminNotices'] = array();
+						}
+						
+						if ($csvGenerator->generateCSV($filePath)) {
+							array_push(
+								$_SESSION['adminNotices'],
+								array(
+									'type' => 'success',
+									'isDismissible' => false,
+									'message' => __("CSV file :", "debampass") .' <a href="'. plugins_url($directoryName . $fileName, __FILE__) .'" target="_blank">'. $fileName .'</a>',
+								)
+							);
+						} else {
+							array_push(
+								$_SESSION['adminNotices'],
+								array(
+									'type' => 'success',
+									'isDismissible' => false,
+									'message' => __("An error occured while generating the CSV file", "debampass"),
+								)
+							);
+						}
+					}
+					
+					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce', 'action'), wp_unslash($_SERVER['REQUEST_URI'])));
+					exit();
+				} elseif (!empty($_REQUEST['_wp_http_referer'])) {
+					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI'])));
+					exit();
+				}
+				
 				$generatedPassListTable->prepare_items();
 				
 				$membershipPlans = wc_memberships_get_membership_plans();
 				
+				$adminNotices = array();
+				if (isset($_SESSION['adminNotices'])) {
+					$adminNotices = $_SESSION['adminNotices'];
+					unset($_SESSION['adminNotices']);
+				}
+				
 				include "templates/admin/page-passes-generated.php";
-			}
-			
-			// Page admin de visualisation des pass activés
-			private function passActivated($activeTab)
-			{
-				include "templates/admin/page-passes-activated.php";
 			}
 			
 			
@@ -863,6 +816,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				if (!file_exists($path)) {
 					$isDirectoryCreated = mkdir($path, 0775, true);
 					
+					// (Pas besoin en fait)
 					// $handle = fopen($path .'index.php', 'w');
 					// fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
 					// fwrite($handle, "<?php // Munen");
@@ -871,145 +825,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				return $isDirectoryCreated;
 			}
-			
-			// TMP
-			/*public function tmpPassGenerator()
-			{
-				global $wpdb;
-				
-				$generationErrors = array();
-				
-				// Variables de l'algo
-				$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
-				
-				$max = 999999999; // Nombre maximum des codes
-				$maxString = $max ."";
-				$maxLength = strlen($maxString);
-				// $max = 4000; // Nombre maximum des codes
-				
-				$b = 1; // L'occurence de la boucle. Sert comme valeur initiale pour le code.
-				
-				$code; // Le code courant
-				$codeTmp = $b;
-				
-				
-				$batchSize = 1000;
-				
-				$tableName = $wpdb->prefix ."debampass";
-				
-				// On récupère le nombre d'enregistrements
-				$queryNbPass = "";
-				$queryNbPass .= "SELECT COUNT(id) ";
-				$queryNbPass .= "FROM $tableName ";
-				
-				$resultNbPass = $wpdb->get_var($queryNbPass);
-				
-				
-				// Si on a moins de codes disponibles que de codes que l'on veut générer
-				if (($max - $resultNbPass) < $_POST['pass-generation-pass-number']) {
-					array_push($generationErrors, sprintf(__("There are only %d available codes left", "debampass"), ($max - $resultNbPass)));
-				} else {
-					if ($resultNbPass == 0) { // Première génération
-						$code = $b;
-					} else {
-						// On récupère le dernier enregistrement en BDD pour continuer à partir de son code
-						$queryGetLastPass = "";
-						$queryGetLastPass .= "SELECT code ";
-						$queryGetLastPass .= "FROM $tableName ";
-						$queryGetLastPass .= "ORDER BY id DESC ";
-						$queryGetLastPass .= "LIMIT 1";
-						
-						$resultLastPass = $wpdb->get_results($queryGetLastPass);
-						
-						$code = $resultLastPass[0]->code;
-						$code = intval($code);
-						
-						// On calcule l'occurence ($b) de la boucle
-						$i = 0;
-						$codeTmp;
-						while ($codeTmp != $code) {
-							$codeTmp = $codeTmp + $step;
-							
-							if ($codeTmp > $max) {
-								$b++;
-								$codeTmp = $b;
-							}
-							
-							$i++;
-						}
-					}
-					
-					
-					$queryInsertPassTitle = "";
-					$queryInsertPassTitle .= "INSERT INTO $tableName (membership_plan, code, date_end_code_active, created_at) ";
-					$queryInsertPassTitle .= "VALUES ";
-					
-					
-					$uploadExportsPath = realpath(dirname(__FILE__)) ."/exports/";
-					if (!file_exists($uploadExportsPath)) {
-						$returned = mkdir($uploadExportsPath, 0775, true);
-					}
-					
-					// On va générer les pass (autant que défini dans $_POST['pass-generation-pass-number'])
-					$codeString;
-					
-					$queryInsertPass = "";
-					// $queryInsertPass .= ", ";
-					
-					$indexFile = 0;
-					for ($i = 0; $i < $_POST['pass-generation-pass-number']; $i++) {
-						// $codeTmp = $code + $step;
-						$code = $code + $step;
-						
-						// Si on dépasse $max (999999999) -> on recommence en ajoutant 1 à la valeur initiale
-						// if ($codeTmp > $max) {
-						if ($code > $max) {
-							$b++;
-							$code = $b;
-						}
-						
-						$codeString = $code ."";
-						$codeStringLength = strlen($codeString);
-						for ($j = 0; $j < $maxLength - $codeStringLength; $j++) {
-							$codeString = "0". $codeString;
-						}
-						
-						// if ($i > 0) {
-						if ($i != 0 && ($i % $batchSize) != 1) {
-							$queryInsertPass .= ", ";
-						}
-						
-						$queryInsertPass .= "(12166, '". $codeString ."', '". $_POST['pass-generation-codes-expiration-date'] ."', NOW())";
-						
-						if ($i % $batchSize == 0) {
-							$queryString = $queryInsertPassTitle . $queryInsertPass;
-							
-							$filePath = $uploadExportsPath . "query_". $indexFile .".sql";
-							
-							$handle = fopen($filePath, 'w');
-							fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
-							fwrite($handle, $queryString);
-							fclose($handle);
-							
-							$queryInsertPass = "";
-							// $queryInsertPass .= ", ";
-							$indexFile++;
-						}
-					}
-					
-					
-					$queryString = $queryInsertPassTitle . $queryInsertPass;
-					$filePath = $uploadExportsPath . "query_". $indexFile .".sql";
-					
-					$handle = fopen($filePath, 'w');
-					fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // Pour un bon encodage
-					fwrite($handle, $queryString);
-					fclose($handle);
-					
-					exit;
-				}
-			}*/
 		}
+
 		
 		new DEBamPass();
 	}
