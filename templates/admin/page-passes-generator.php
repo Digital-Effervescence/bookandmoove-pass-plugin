@@ -1,5 +1,7 @@
 <div id="debampass-generator-page" class="wrap">
 	<h1><?php _e("Pass generation", "debampass"); ?></h1>
+	
+	<?php include "elements/admin-notices.php"; ?>
 
 	<?php if (isset($generationErrors) && !empty($generationErrors)): ?>
 		<div class="global-errors">

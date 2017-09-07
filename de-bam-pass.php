@@ -503,13 +503,23 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 				
 				
-				$generationErrors = array();
+				// Messages de notification
+				$adminNotices = array();
+				// $generationErrors = array();
 				
 				// Création du dossier qui contiendra les CSV
 				$directoryName = "/exports/";
 				$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
 				if (!$this->exportDirectoryCheck($uploadExportsPath)) {
-					array_push($generationErrors, __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"));
+					// array_push($generationErrors, __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"));
+					array_push(
+						$adminNotices,
+						array(
+							'type' => 'error',
+							'isDismissible' => false,
+							'message' =>  __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"),
+						)
+					);
 				}
 				
 				$nbMinPass = 1;
@@ -598,7 +608,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					if (empty($errors)) {
 						global $wpdb;
 						
-						$validationMessages = array();
+						// $validationMessages = array();
 						
 						// Variables de l'algo
 						$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
@@ -718,8 +728,23 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							$resultInsertPass = $wpdb->query($queryString);
 							$nbInsertedRows += $resultInsertPass;
 							
-							array_push($validationMessages, sprintf(__("%d pass inserted successfully", "debampass"), $nbInsertedRows));
-							array_push($validationMessages, __("CSV file :", "debampass") .' <a href="'. plugins_url($directoryName . $fileName, __FILE__) .'" target="_blank">'. $fileName .'</a>');
+							array_push(
+								$adminNotices,
+								array(
+									'type' => 'success',
+									'isDismissible' => true,
+									'message' =>  sprintf(__("%d pass inserted successfully", "debampass"), $nbInsertedRows),
+								)
+							);
+							
+							array_push(
+								$adminNotices,
+								array(
+									'type' => 'success',
+									'isDismissible' => false,
+									'message' =>  __("CSV file :", "debampass") .' <a href="'. plugins_url($directoryName . $fileName, __FILE__) .'" target="_blank">'. $fileName .'</a>',
+								)
+							);
 						}
 					}
 				}
