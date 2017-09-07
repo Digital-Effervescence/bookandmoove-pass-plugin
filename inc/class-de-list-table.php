@@ -38,13 +38,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	
 	public $items;
 	
-	// Checks the current user's permissions
-	/*public function ajax_user_can()
-	{
-		die( 'function WP_List_Table::ajax_user_can() must be over-ridden in a sub-class.' );
-	}*/
-	
-	
 
 	/**
 	 * Prepares the list of items for displaying.
@@ -65,11 +58,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 				'per_page' => $this->nbItemsPerPage,
 			)
 		);
-
-		
-		// echo "<pre>";
-		// print_r($this->items);
-		// echo "</pre>";
 	}
 	
 	public function retrieveGeneratedPasses($numPage = 1)
@@ -232,9 +220,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		
 		
 		
-		// $this->nbPass = $wpdb->get_var($wpdb->prepare($this->queryCountGeneratedPasses, $this->queryParamsCount));
-		
-		
 		$this->querySelectGeneratedPasses = "";
 		$this->querySelectGeneratedPasses .= "SELECT dbp.id, dbp.membership_plan, dbp.user_id, dbp.code, dbp.date_end_code_active, dbp.created_at, dbp.updated_at, u.ID as id_user, u.user_email, u.display_name, p.ID AS id_post, p.post_title, p.post_name ";
 		$this->querySelectGeneratedPasses .= "FROM $tableDeBamPass dbp ";
@@ -337,6 +322,11 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	{
 		$this->orderColumn = $column;
 		$this->orderDirection = strtoupper($direction);
+	}
+	
+	public function getNbPass()
+	{
+		return $this->nbPass;
 	}
 	
 	// Statut des pass

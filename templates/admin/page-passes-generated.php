@@ -100,17 +100,19 @@
 		
 		<?php $generatedPassListTable->display(); ?>
 		
-		<?php
-			$url = wp_unslash($_SERVER['REQUEST_URI']);
-			$query = parse_url($url, PHP_URL_QUERY);
+		<?php if ($generatedPassListTable->getNbPass() > 0): ?>
+			<?php
+				$url = wp_unslash($_SERVER['REQUEST_URI']);
+				$query = parse_url($url, PHP_URL_QUERY);
+				
+				if ($query) {
+					$url .= '&action=download-csv';
+				} else {
+					$url .= '?action=download-csv';
+				}
+			?>
 			
-			if ($query) {
-				$url .= '&action=download-csv';
-			} else {
-				$url .= '?action=download-csv';
-			}
-		?>
-		
-		<a href="<?php echo $url; ?>" class="button"><?php _e("Download data in CSV format", "debampass"); ?></a>
+			<a href="<?php echo $url; ?>" class="button"><?php _e("Download data in CSV format", "debampass"); ?></a>
+		<?php endif; ?>
 	</form>
 </div>

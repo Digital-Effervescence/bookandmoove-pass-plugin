@@ -56,17 +56,3 @@
 		</p>
 	</form>
 </div>
-
-<?php
-	// echo "<pre>";
-	// print_r($errors);
-	// echo "</pre>";
-	
-	// $codeString = "236";
-	// $codeStringLength = strlen($codeString);
-	// for ($j = 0; $j < (9 - $codeStringLength); $j++) {
-		// $codeString = "0". $codeString;
-	// }
-	
-	// echo "code string : ". $codeString;
-?>

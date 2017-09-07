@@ -505,7 +505,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				// Messages de notification
 				$adminNotices = array();
-				// $generationErrors = array();
 				
 				// Création du dossier qui contiendra les CSV
 				$directoryName = "/exports/";
@@ -607,8 +606,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					// Formulaire valide
 					if (empty($errors)) {
 						global $wpdb;
-						
-						// $validationMessages = array();
 						
 						// Variables de l'algo
 						$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
