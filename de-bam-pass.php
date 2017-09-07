@@ -34,6 +34,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 		{
 			private $templates;
 			
+			private $codeValidationNbTryMax = 5;
+			
 			
 			public function __construct()
 			{
@@ -124,13 +126,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 			}
 			
-			public function addCartFee()
-			{
-				global $woocommerce;
-				
-				$woocommerce->cart->add_fee('test_fee', -5);
-			}
-			
 			// Ajout du container HTML du plugin à la page courante
 			public function deBamPassHtmlContainer($content)
 			{
@@ -145,6 +140,13 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			
 			public function enterCodePopin()
 			{
+				// Sécurité, on définit un certain nombre d'essais
+				if (!session_id()) {
+					session_start();
+				}
+				
+				$_SESSION['codeValidationNbTry'] = 0;
+				
 				$this->templates->get_template_part('popin', 'enter-code');
 				die();
 			}
@@ -154,33 +156,51 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			{
 				global $wpdb;
 				
-				if (isset($_POST['enter-code-pass-code'])) {
-					$tableName = $wpdb->prefix ."debampass";
+				if (!session_id()) {
+					session_start();
+				}
+				
+				if (isset($_POST['enter-code-pass-code']) && isset($_SESSION['codeValidationNbTry'])) {
+					$_SESSION['codeValidationNbTry'] = $_SESSION['codeValidationNbTry'] + 1;
 					
-					$queryGetPass = "";
-					$queryGetPass .= "SELECT id ";
-					$queryGetPass .= "FROM $tableName ";
-					$queryGetPass .= "WHERE user_id IS NULL ";
-					$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
-					$queryGetPass .= "AND code = %s";
-					
-					$result = $wpdb->query($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['enter-code-pass-code']));
-					
-					$isOk = 0;
-					$message = __("The entered code is incorrect", "debampass");
-					if ($result == 1) { // On a bien 1 pass non activé
-						$isOk = 1;
-						$message = "";
+					if ($_SESSION['codeValidationNbTry'] <= $this->codeValidationNbTryMax) {
+						$tableName = $wpdb->prefix ."debampass";
+						
+						$queryGetPass = "";
+						$queryGetPass .= "SELECT id ";
+						$queryGetPass .= "FROM $tableName ";
+						$queryGetPass .= "WHERE user_id IS NULL ";
+						$queryGetPass .= "AND date_end_code_active >= DATE(NOW()) ";
+						$queryGetPass .= "AND code = %s";
+						
+						$result = $wpdb->query($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['enter-code-pass-code']));
+						
+						$isOk = 0;
+						$message = __("The entered code is incorrect", "debampass");
+						if ($result == 1) { // On a bien 1 pass non activé
+							$isOk = 1;
+							$message = "";
+						}
+						
+						echo json_encode(
+							array(
+								'status' => 'success',
+								'passExists' => $isOk,
+								'message' => $message,
+								'loggued' => is_user_logged_in(),
+							)
+						);
+					} else { // Trop d'essais -> on bloque
+						unset($_SESSION['codeValidationNbTry']);
+						
+						echo json_encode(
+							array(
+								'status' => 'success',
+								'message' => __("Maximum number of attempts reached", "debampass"),
+								'log' => "Nombre d'essais dépassés.",
+							)
+						);
 					}
-					
-					echo json_encode(
-						array(
-							'status' => 'success',
-							'passExists' => $isOk,
-							'message' => $message,
-							'loggued' => is_user_logged_in(),
-						)
-					);
 				} else {
 					echo json_encode(
 						array(
@@ -510,8 +530,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					}
 				}
 				
-				
-				// if (isset($metaMembershipPlan[0]) && isset($metaMembershipPlan[0][0])) {				
 				
 				// Validation du formulaire de génération de pass
 				if (isset($_POST['pass-generation-submit'])) {
