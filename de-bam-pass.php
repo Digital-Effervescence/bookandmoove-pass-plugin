@@ -796,8 +796,23 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				$generatedPassListTable->prepare_items();
 				
-				$membershipPlans = wc_memberships_get_membership_plans();
+				// $membershipPlans = wc_memberships_get_membership_plans();
+				// On ne récupère que les Membership Plans qui ont été associés à des pass
+				global $wpdb;
 				
+				$tableDeBamPass = $wpdb->prefix ."debampass";
+				$tablePosts = $wpdb->prefix ."posts";
+				
+				$queryDistinctMembershipPlan = "";
+				$queryDistinctMembershipPlan .= "SELECT dbp.membership_plan, p.post_title ";
+				$queryDistinctMembershipPlan .= "FROM $tableDeBamPass dbp ";
+				$queryDistinctMembershipPlan .= "LEFT JOIN $tablePosts p ON dbp.membership_plan = p.ID ";
+				$queryDistinctMembershipPlan .= "GROUP BY dbp.membership_plan ";
+				$queryDistinctMembershipPlan .= "ORDER BY p.post_title";
+				
+				$membershipPlans = $wpdb->get_results($queryDistinctMembershipPlan);
+				
+				// Messages de notification
 				$adminNotices = array();
 				if (isset($_SESSION['adminNotices'])) {
 					$adminNotices = $_SESSION['adminNotices'];

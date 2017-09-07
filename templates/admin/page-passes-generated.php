@@ -39,7 +39,7 @@
 				<select name="search-plan-type" id="search-plan-type" class="short">
 					<option value="" <?php echo (!isset($_GET['search-plan-type']) || trim($_GET['search-plan-type']) == "") ? 'selected="selected"' : ''; ?>><?php _e("Select", "debampass"); ?></option>
 					<?php foreach ($membershipPlans as $aMembershipPlan): ?>
-						<option value="<?php echo $aMembershipPlan->id; ?>" <?php echo (isset($_GET['search-plan-type']) && trim($_GET['search-plan-type']) == $aMembershipPlan->id) ? 'selected="selected"' : ''; ?>><?php echo $aMembershipPlan->name; ?></option>
+						<option value="<?php echo $aMembershipPlan->membership_plan; ?>" <?php echo (isset($_GET['search-plan-type']) && trim($_GET['search-plan-type']) == $aMembershipPlan->membership_plan) ? 'selected="selected"' : ''; ?>><?php echo $aMembershipPlan->post_title; ?></option>
 					<?php endforeach; ?>
 				</select>
 			</span>
