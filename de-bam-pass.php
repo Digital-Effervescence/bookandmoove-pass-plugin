@@ -551,7 +551,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			{
 				add_submenu_page("woocommerce", __("Pass generator", "debampass"), __("Pass generator", "debampass"), "manage_options", "woocommerce-debampass-generator", array($this, "passGenerator"));
 				
-				add_submenu_page("woocommerce", __("Pass viewer", "debampass"), __("Pass viewer", "debampass"), "manage_options", "woocommerce-debampass-viewer", array($this, "passViewer"));
+				add_submenu_page("woocommerce", __("Pass viewer", "debampass"), __("Pass viewer", "debampass"), "manage_options", "woocommerce-debampass-viewer", array($this, "passGenerated"));
 			}
 			
 			// Page admin de génération de pass
@@ -775,27 +775,15 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				// echo "</pre>";
 			}
 			
-			// Dispatcher sur le bon onglet de la page 'Pass viewer'
-			public function passViewer()
-			{
-				if (isset($_GET['tab'])) {
-					$activeTab = $_GET['tab'];
-					
-					if ($activeTab == "generated-passes") {
-						$this->passGenerated($activeTab);
-					} elseif ($activeTab == "activated-passes") {
-						$this->passActivated($activeTab);
-					}
-				} else {
-					$activeTab = "generated-passes";
-					
-					$this->passGenerated($activeTab);
-				}
-			}
-			
 			// Page admin de visualisation des pass générés
-			private function passGenerated($activeTab)
+			public function passGenerated($activeTab)
 			{
+				// header('Content-Type: application/csv');
+				// header('Content-Disposition: attachment; filename=example.csv');
+				// header('Pragma: no-cache');
+				// readfile("exports/2017_09_06-14_47_59-pass_generation.csv");
+				// exit;
+				
 				$generatedPassListTable = new DE_List_Table_Pass_Generated();
 				
 				$doAction = $generatedPassListTable->current_action();
