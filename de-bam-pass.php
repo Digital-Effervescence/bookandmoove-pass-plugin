@@ -494,7 +494,24 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				$nbMinPass = 1;
 				$nbMaxPass = 5000;
-				$membershipPlans = wc_memberships_get_membership_plans();
+				$membershipPlansTmp = wc_memberships_get_membership_plans();
+				$membershipPlans = array();
+				
+				foreach ($membershipPlansTmp as $aMembershipPlan) {
+					$metaMembershipPlan = get_post_meta($aMembershipPlan->id, '_product_ids');
+					if (isset($metaMembershipPlan[0]) && isset($metaMembershipPlan[0][0])) {
+						array_push(
+							$membershipPlans,
+							array(
+								'id' => $aMembershipPlan->id,
+								'name' => $aMembershipPlan->name,
+							)
+						);
+					}
+				}
+				
+				
+				// if (isset($metaMembershipPlan[0]) && isset($metaMembershipPlan[0][0])) {				
 				
 				// Validation du formulaire de génération de pass
 				if (isset($_POST['pass-generation-submit'])) {
@@ -796,7 +813,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				$generatedPassListTable->prepare_items();
 				
-				// $membershipPlans = wc_memberships_get_membership_plans();
 				// On ne récupère que les Membership Plans qui ont été associés à des pass
 				global $wpdb;
 				

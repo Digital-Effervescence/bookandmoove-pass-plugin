@@ -22,7 +22,7 @@
 			<label for="pass-generation-plan-type"><?php _e("Plan type", "debampass"); ?></label>
 			<select name="pass-generation-plan-type" id="pass-generation-plan-type" class="short">
 				<?php foreach ($membershipPlans as $aMembershipPlan): ?>
-					<option value="<?php echo $aMembershipPlan->id; ?>"><?php echo $aMembershipPlan->name; ?></option>
+					<option value="<?php echo $aMembershipPlan['id']; ?>"><?php echo $aMembershipPlan['name']; ?></option>
 				<?php endforeach; ?>
 			</select>
 			
