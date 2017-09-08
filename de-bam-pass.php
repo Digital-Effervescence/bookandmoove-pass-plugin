@@ -176,7 +176,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						$result = $wpdb->query($wpdb->prepare($this->getCodePassEntryQuery(), $_POST['enter-code-pass-code']));
 						
 						$isOk = 0;
-						$message = __("The entered code is incorrect", "debampass");
+						$message = __("The entered code is incorrect or is no longer active", "debampass");
 						if ($result == 1) { // On a bien 1 pass non activé
 							$isOk = 1;
 							$message = "";
@@ -195,7 +195,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						
 						echo json_encode(
 							array(
-								'status' => 'success',
+								'status' => 'error',
 								'message' => __("Maximum number of attempts reached", "debampass"),
 								'log' => "Nombre d'essais dépassés.",
 							)
@@ -204,7 +204,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				} else {
 					echo json_encode(
 						array(
-							'status' => 'success',
+							'status' => 'error',
 							'message' => __("An error has occurred", "debampass"),
 							'log' => "Manque la variable POST contenant le code.",
 						)
@@ -353,7 +353,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				if (isset($_POST['idOrder']) && $_POST['deBamPassCode']) { // Si on a bien les données $_POST
 					if (get_current_user_id() != 0) { // Si on a bien un utilisateur connecté
 						$order = new WC_Order($_POST['idOrder']); // On récupère la commande
-						$order->update_status('completed', __("Pass activated", "debampass")); // On met à jour le status de la commande, pour la finaliser
+						$order->update_status('completed', __("Pass activated", "debampass")); // On met à jour le statut de la commande, pour la finaliser
 						
 						// On met à jour dans la BDD l'entrée du pass de la table 'debampass' pour indiquer que le pass est activé
 						$tableName = $wpdb->prefix ."debampass";
@@ -369,7 +369,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						$resultUpdatePass = $wpdb->query($wpdb->prepare($queryActivatePass, get_current_user_id(), $_POST['deBamPassCode']));
 						
 						if (false === $resultUpdatePass || $resultUpdatePass != 1) {
-							$order->update_status('processing', __("Pass activation error", "debampass")); // On repasse le status de la commande à 'En cours'
+							$order->update_status('processing', __("Pass activation error", "debampass")); // On repasse le statut de la commande à 'En cours'
 							
 							echo json_encode(
 								array(
