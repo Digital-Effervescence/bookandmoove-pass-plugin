@@ -1,0 +1,7 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+	RewriteCond %{REQUEST_URI} ^.*exports/.*
+	RewriteCond %{HTTP_COOKIE} !^.*wordpress_logged_in.*$ [NC]
+	RewriteRule \.(csv)$ - [F]
+</IfModule>
