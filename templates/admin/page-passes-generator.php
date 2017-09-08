@@ -52,7 +52,7 @@
 		</p>
 		
 		<p class="submit-container">
-			<input type="submit" name="pass-generation-submit" id="pass-generation-submit" class="de-bam-pass-button" value="<?php _e("Generate", "debampass"); ?>" />
+			<input type="submit" name="pass-generation-submit" id="pass-generation-submit" class="button" value="<?php _e("Generate", "debampass"); ?>" />
 		</p>
 	</form>
 </div>

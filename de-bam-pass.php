@@ -814,7 +814,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						$filePath = $uploadExportsPath . $fileName;
 						
 						$csvGenerator = new DE_CSV_Generator($querySelectGeneratedPasses, $queryParams);
-						$csvGenerator->setBatchSize(10);
+						$csvGenerator->setBatchSize(500);
 						
 						if (!session_id()) {
 							session_start();

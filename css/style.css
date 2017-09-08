@@ -106,7 +106,7 @@
 #debampass-generator-page .form-field label + *.short {width: 250px;}
 #debampass-generator-page .form-field label + *.long {width: calc(100% - 180px);}
 
-#debampass-generator-page .submit-container input[type='submit'] {font-family: Arial; font-weight: bold; text-transform: uppercase;}
+#debampass-generator-page .submit-container input[type='submit'] {font-family: Arial; font-weight: bold;}
 
 #debampass-generator-page .errors {display: block; color: #FF0000;}
 #debampass-generator-page .global-success .message {color: #00A400;}
@@ -116,7 +116,7 @@
 /* Voir pass */
 .wp-list-table .column-code {font-family: inherit; font-size: 14px;}
 
-.search-box {display: -webkit-flex; display: flex; -webkit-justify-content: flex-end; justify-content: flex-end; -webkit-align-items: flex-start; align-items: flex-start; float: right; margin: 15px 0 10px 0;}
+.search-box {display: -webkit-flex; display: flex; -webkit-justify-content: flex-end; justify-content: flex-end; -webkit-align-items: flex-start; align-items: flex-start; -webkit-flex-wrap: wrap; flex-wrap: wrap; float: right; width: 100%; margin: 15px 0 10px 0;}
 .search-box .search-field-container {margin-right: 10px;}
 .search-box .search-field-container .search-field-container-sub {display: inline-block;}
 .search-box .search-field-container label {display: block;}
