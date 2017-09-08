@@ -20,8 +20,6 @@ require dirname(DEBAMPASS) .'/inc/Gamajo_Template_Loader.php';
 require dirname(DEBAMPASS) .'/inc/PW_Template_Loader.php';
 
 require dirname(DEBAMPASS) .'/inc/class-de-list-table.php';
-// require dirname(DEBAMPASS) .'/inc/de-async-task.php';
-// require dirname(DEBAMPASS) .'/inc/BackgroundProcess.php';
 require dirname(DEBAMPASS) .'/inc/class-de-csv-generator.php';
 
 require dirname(DEBAMPASS) .'/inc/Tools.php';
@@ -35,6 +33,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			private $templates;
 			
 			private $codeValidationNbTryMax = 5;
+			
+			private $timeSpentDeleteOldExport = 86400; // Durée depuis laquelle on supprime les anciens exports CSV (en secondes) (1 jour)
 			
 			
 			public function __construct()
@@ -519,6 +519,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							'message' =>  __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"),
 						)
 					);
+				} else {
+					// On supprime les anciens fichiers d'export
+					$filesExport = array_diff(scandir($uploadExportsPath, SCANDIR_SORT_ASCENDING), array('.', '..'));
+					foreach ($filesExport as $aFileExport) {
+						if (filectime($uploadExportsPath . $aFileExport) < time() - $this->timeSpentDeleteOldExport) {
+							unlink($uploadExportsPath . $aFileExport);
+						}
+					}
 				}
 				
 				$nbMinPass = 1;
