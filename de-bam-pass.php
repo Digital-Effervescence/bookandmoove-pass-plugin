@@ -730,9 +730,11 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 							
 							fclose($handle);
 							
-							$queryString = $queryInsertPassTitle . $queryInsertPass;
-							$resultInsertPass = $wpdb->query($queryString);
-							$nbInsertedRows += $resultInsertPass;
+							if ($queryInsertPass != "") {
+								$queryString = $queryInsertPassTitle . $queryInsertPass;
+								$resultInsertPass = $wpdb->query($queryString);
+								$nbInsertedRows += $resultInsertPass;
+							}
 							
 							array_push(
 								$adminNotices,
