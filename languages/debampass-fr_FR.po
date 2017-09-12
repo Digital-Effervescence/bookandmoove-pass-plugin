@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-08 12:06+0200\n"
-"PO-Revision-Date: 2017-09-08 12:06+0200\n"
+"POT-Creation-Date: 2017-09-12 12:34+0200\n"
+"PO-Revision-Date: 2017-09-12 12:36+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -60,7 +60,7 @@ msgstr "Voir les pass"
 msgid "You are not allowed to access this page."
 msgstr "Vous n'avez pas la permission d'accéder à cette page."
 
-#: de-bam-pass.php:519
+#: de-bam-pass.php:518
 msgid ""
 "Unable to create the directory containing the CSV exports on the server. "
 "Please temporarily grant sufficient rights to the 'de-bam-pass' directory in "
@@ -70,64 +70,69 @@ msgstr ""
 "Veuillez donner temporairement les droits suffisants sur le répertoire 'de-"
 "bam-pass' dans 'wp-content/plugins/' puis rechargez la page."
 
-#: de-bam-pass.php:560 de-bam-pass.php:575 de-bam-pass.php:591
+#: de-bam-pass.php:559 de-bam-pass.php:574 de-bam-pass.php:590
 msgid "Is required"
 msgstr "Est requis"
 
-#: de-bam-pass.php:567
+#: de-bam-pass.php:566
 msgid "Is not a valid membership plan"
 msgstr "N'est pas un membership plan valide"
 
-#: de-bam-pass.php:583
+#: de-bam-pass.php:582
 msgid "Must be a valid date"
 msgstr "Doit être une date valide"
 
-#: de-bam-pass.php:596
+#: de-bam-pass.php:595
 msgid "Must be a number"
 msgstr "Doit être un nombre entier"
 
-#: de-bam-pass.php:601
+#: de-bam-pass.php:600
 #, php-format
 msgid "Must be less than or equal to %d"
 msgstr "Doit être inférieur ou égal à %d"
 
-#: de-bam-pass.php:606
+#: de-bam-pass.php:605
 #, php-format
 msgid "Must be greater than or equal to %d"
 msgstr "Doit être supérieur ou égal à %d"
 
-#: de-bam-pass.php:644
+#: de-bam-pass.php:643
 #, php-format
 msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
-#: de-bam-pass.php:681 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:245
+#: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:274
 msgid "Code"
 msgstr "Code"
 
-#: de-bam-pass.php:681 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:248 templates/admin/page-passes-generated.php:49
+#: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:277 templates/admin/page-passes-generated.php:49
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
-#: de-bam-pass.php:681 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:247
+#: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
+#: inc/class-de-list-table.php:276
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
-#: de-bam-pass.php:741
+#: de-bam-pass.php:740
 #, php-format
 msgid "%d pass inserted successfully"
 msgstr "%d pass insérés avec succès"
 
-#: de-bam-pass.php:750 de-bam-pass.php:840
+#: de-bam-pass.php:749 de-bam-pass.php:838
 msgid "CSV file :"
 msgstr "Fichier CSV :"
 
-#: de-bam-pass.php:849
+#: de-bam-pass.php:847
 msgid "An error occured while generating the CSV file"
 msgstr "Une erreur est survenue lors de la génération du fichier CSV"
+
+#: de-bam-pass.php:879
+#, php-format
+msgid "%d passes successfully deleted."
+msgstr "%d pass supprimé(s) avec succès"
 
 #: inc/class-de-csv-generator.php:24
 msgid "User Email"
@@ -137,17 +142,21 @@ msgstr "E-mail de l'utilisateur"
 msgid "User display name"
 msgstr "Nom d'affichage de l'utilisateur"
 
-#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:249
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:278
 #: templates/admin/page-passes-generated.php:66
 msgid "Activation date"
 msgstr "Date d'activation"
 
-#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:250
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:279
 #: templates/admin/page-passes-generated.php:83
 msgid "Creation date"
 msgstr "Date de création"
 
-#: inc/class-de-list-table.php:246
+#: inc/class-de-list-table.php:134
+msgid "Delete"
+msgstr "Supprimer"
+
+#: inc/class-de-list-table.php:275
 msgid "User"
 msgstr "Utilisateur"
 

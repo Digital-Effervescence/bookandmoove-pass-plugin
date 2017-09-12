@@ -128,6 +128,30 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		return $sortableColumns;
 	}
 	
+	public function get_bulk_actions()
+	{
+		$actions = array(
+			'delete' => __("Delete", "debampass"),
+		);
+		
+		return $actions;
+	}
+	
+	public function column_cb($item)
+	{
+		// echo "<pre>";
+		// print_r($item);
+		// echo "</pre>";
+		
+		$dateEndCodeActive = DateTime::createFromFormat('Y-m-d', $item->date_end_code_active);
+		$currentDate = new DateTime();
+		
+		// Seulement si le pass a expiré est qu'il n'a pas été activé
+		if (trim($item->user_id) == "" && trim($item->updated_at) == "" && $dateEndCodeActive < $currentDate) {
+			return sprintf('<input type="checkbox" name="pass[]" value="%s" />', $item->id);
+		}
+	}
+	
 	
 	public function initializeQueries()
 	{
@@ -241,7 +265,12 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	 */
 	public function get_columns()
 	{
+		// <label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All' ) . '</label>'
+                // . '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
+				
 		$columns = array(
+			// 'checkbox' => '<label class="screen-reader-text" for="cb-select-all-1"> <input type="checkbox" id="cb-select-all-1" />',
+			'cb' => '<input type="checkbox" />',
 			'code' => __("Code", "debampass"),
 			'user' => __("User", "debampass"),
 			'membership_plan_name' => __("Membership Plan", "debampass"),

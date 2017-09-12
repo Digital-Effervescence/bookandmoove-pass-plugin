@@ -510,7 +510,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$directoryName = "/exports/";
 				$uploadExportsPath = realpath(dirname(__FILE__)) . $directoryName;
 				if (!$this->exportDirectoryCheck($uploadExportsPath)) {
-					// array_push($generationErrors, __("Unable to create the directory containing the CSV exports on the server. Please temporarily grant sufficient rights to the 'de-bam-pass' directory in 'wp-content/plugins/' and reload the page.", "debampass"));
 					array_push(
 						$adminNotices,
 						array(
@@ -806,8 +805,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 				
 				if ($doAction) {
-					// Génération d'un CSV
-					if ($doAction == 'download-csv') {
+					if ($doAction == 'download-csv') { // Génération d'un CSV
 						$generatedPassListTable->initializeQueries(); // On initialise les requêtes permettant de retourner les résultats (avec les paramètres courants) et leur nombre
 						
 						// On récupère la requête retournant les résultats ainsi que ses paramètres
@@ -850,9 +848,48 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 								)
 							);
 						}
+					} elseif ($doAction == "delete") { // Suppression de pass de la BDD
+						if (isset($_GET['pass'])) {
+							// echo "<pre>";
+							// print_r($_GET['pass']);
+							// echo "</pre>";
+							
+							global $wpdb;
+							
+							$tableName = $wpdb->prefix ."debampass";
+							
+							$queryDelete = "";
+							$queryDelete .= "DELETE FROM $tableName ";
+							$queryDelete .= "WHERE user_id IS NULL ";
+							$queryDelete .= "AND updated_at IS NULL ";
+							$queryDelete .= "AND date_end_code_active < DATE(NOW()) ";
+							$queryDelete .= "AND id = %d";
+							
+							$nbPassDeleted = 0;
+							foreach ($_GET['pass'] as $aPassId) {
+								$resultDelete = $wpdb->query($wpdb->prepare($queryDelete, $aPassId));
+								$nbPassDeleted += $resultDelete;
+							}
+							
+							if (!session_id()) {
+								session_start();
+							}
+							if (!isset($_SESSION['adminNotices'])) {
+								$_SESSION['adminNotices'] = array();
+							}
+							
+							array_push(
+								$_SESSION['adminNotices'],
+								array(
+									'type' => 'success',
+									'isDismissible' => true,
+									'message' => sprintf(__("%d passes successfully deleted.", "debampass"), $nbPassDeleted),
+								)
+							);
+						}
 					}
 					
-					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce', 'action'), wp_unslash($_SERVER['REQUEST_URI'])));
+					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce', 'action', 'action2', 'pass'), wp_unslash($_SERVER['REQUEST_URI'])));
 					exit();
 				} elseif (!empty($_REQUEST['_wp_http_referer'])) {
 					wp_redirect(remove_query_arg(array('_wp_http_referer', '_wpnonce'), wp_unslash($_SERVER['REQUEST_URI'])));
