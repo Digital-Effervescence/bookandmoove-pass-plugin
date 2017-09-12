@@ -300,6 +300,21 @@ class Tools
 		return $searchValue;
 	}
 	
+	public static function AddParameterToUrl($url, $key, $value)
+	{
+		$query = parse_url($url, PHP_URL_QUERY);
+		
+		if ($query) {
+			$url .= '&';
+		} else {
+			$url .= '?';
+		}
+		
+		$url .= $key .'='. $value;
+		
+		return $url;
+	}
+	
 	public static function WriteLog($log)
 	{
 		if ( is_array( $log ) || is_object( $log ) ) {

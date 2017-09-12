@@ -137,21 +137,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		return $actions;
 	}
 	
-	public function column_cb($item)
-	{
-		// echo "<pre>";
-		// print_r($item);
-		// echo "</pre>";
-		
-		$dateEndCodeActive = DateTime::createFromFormat('Y-m-d', $item->date_end_code_active);
-		$currentDate = new DateTime();
-		
-		// Seulement si le pass a expiré est qu'il n'a pas été activé
-		if (trim($item->user_id) == "" && trim($item->updated_at) == "" && $dateEndCodeActive < $currentDate) {
-			return sprintf('<input type="checkbox" name="pass[]" value="%s" />', $item->id);
-		}
-	}
-	
 	
 	public function initializeQueries()
 	{
@@ -265,11 +250,7 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	 */
 	public function get_columns()
 	{
-		// <label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All' ) . '</label>'
-                // . '<input id="cb-select-all-' . $cb_counter . '" type="checkbox" />';
-				
 		$columns = array(
-			// 'checkbox' => '<label class="screen-reader-text" for="cb-select-all-1"> <input type="checkbox" id="cb-select-all-1" />',
 			'cb' => '<input type="checkbox" />',
 			'code' => __("Code", "debampass"),
 			'user' => __("User", "debampass"),
@@ -285,9 +266,9 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	public function column_default($item, $columnName)
 	{
 		switch ($columnName) {
-			case 'code':
-				return '<span class="column-code">'. $item->code .'</span>';
-				break;
+			// case 'code':
+				// return '<span class="column-code">'. $item->code .'</span>';
+				// break;
 			
 			case 'user':
 				if ($item->user_id != null) {
@@ -318,6 +299,44 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 				return $item->$columnName;
 				break;
 		}
+	}
+	
+	// Gestion de la colonne 'Checkbox'
+	public function column_cb($item)
+	{
+		$dateEndCodeActive = DateTime::createFromFormat('Y-m-d', $item->date_end_code_active);
+		$currentDate = new DateTime();
+		
+		// Seulement si le pass a expiré est qu'il n'a pas été activé
+		if ($this->isExpiredAndNoActive($item)) {
+			return sprintf('<input type="checkbox" name="pass[]" value="%s" />', $item->id);
+		}
+	}
+	
+	// Gestion de la colonne 'Code'
+	public function column_code($item)
+	{
+		$url = wp_unslash($_SERVER['REQUEST_URI']);
+		$url = Tools::AddParameterToUrl($url, 'action', 'delete');
+		$url = Tools::AddParameterToUrl($url, 'pass[]', $item->id);
+		
+		$actions = array(
+			'delete' => '<a href="'. $url .'">'. __("Delete", "debampass") .'</a>',
+		);
+		
+		if ($this->isExpiredAndNoActive($item)) { // Seulement si le pass a expiré est qu'il n'a pas été activé
+			return sprintf('%1$s %2$s', '<span class="column-code">'. $item->code .'</span>', $this->row_actions($actions));
+		} else {
+			return sprintf('%1$s', '<span class="column-code">'. $item->code .'</span>');
+		}
+	}
+	
+	private function isExpiredAndNoActive($item)
+	{
+		$dateEndCodeActive = DateTime::createFromFormat('Y-m-d', $item->date_end_code_active);
+		$currentDate = new DateTime();
+		
+		return trim($item->user_id) == "" && trim($item->updated_at) == "" && $dateEndCodeActive < $currentDate;
 	}
 	
 	
