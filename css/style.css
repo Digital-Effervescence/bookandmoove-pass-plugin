@@ -14,6 +14,9 @@
 #page ul.primary-menu .menu-item.save-code:hover {background-color: #484848;}
 #page ul.primary-menu .menu-item.save-code > a {padding: 10px 20px; color: #FFFFFF;}
 
+#page ul.primary-menu .menu-item.save-code.only-desktop {}
+#page ul.primary-menu .menu-item.save-code.only-mobile {display: none;}
+
 
 /* Popins */
 #de-bam-pass-popin-container {display: none; position: fixed; overflow: auto; left: 0px; top: 0px; width: 100%; height: 100%; text-align: center; hyphens: manual; z-index: 999990;}
@@ -164,6 +167,9 @@
 
 @media (max-width: 900px)
 {
+	#page ul.primary-menu .menu-item.save-code.only-desktop {display: none;}
+	#page ul.primary-menu .menu-item.save-code.only-mobile {display: block; border-radius: 0px; margin-left: 0px;}
+
 	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-form-popin .popin-content .content #order_review .form-row {padding-left: 0px;}
 }
 
