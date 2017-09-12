@@ -39,6 +39,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			
 			public function __construct()
 			{
+				date_default_timezone_set(ini_get('date.timezone'));
+				
 				register_activation_hook(__FILE__, array($this, 'install'));
 				
 				
@@ -617,7 +619,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						// Variables de l'algo
 						$step = 40005683; // La valeur que l'on ajoute au code courant pour créer un nouveau code
 						
-						$max = 999999999; // Nombre maximum des codes
+						$max = 999999999; // Nombre maximum de codes possibles
 						$maxString = $max ."";
 						$maxLength = strlen($maxString);
 						
@@ -850,10 +852,6 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 						}
 					} elseif ($doAction == "delete") { // Suppression de pass de la BDD
 						if (isset($_GET['pass'])) {
-							// echo "<pre>";
-							// print_r($_GET['pass']);
-							// echo "</pre>";
-							
 							global $wpdb;
 							
 							$tableName = $wpdb->prefix ."debampass";
@@ -942,7 +940,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				return $isDirectoryCreated;
 			}
 		}
-
+		
 		
 		new DEBamPass();
 	}

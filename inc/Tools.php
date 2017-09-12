@@ -152,7 +152,6 @@ class Tools
 			if ($i > 0)
 				$string .= "-";
 			
-			// $string .= ucfirst($wordArray[$i]);
 			$string .= Tools::MbUcfirst($wordArray[$i]);
 		}
 		
@@ -163,7 +162,6 @@ class Tools
 			if ($i > 0)
 				$string .= "'";
 			
-			// $string .= ucfirst($wordArray[$i]);
 			$string .= Tools::MbUcfirst($wordArray[$i]);
 		}
 		
@@ -174,7 +172,6 @@ class Tools
 			if ($i > 0)
 				$string .= " ";
 			
-			// $string .= ucfirst($wordArray[$i]);
 			$string .= Tools::MbUcfirst($wordArray[$i]);
 		}
 		

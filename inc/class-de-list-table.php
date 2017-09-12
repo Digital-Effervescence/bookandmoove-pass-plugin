@@ -266,10 +266,6 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 	public function column_default($item, $columnName)
 	{
 		switch ($columnName) {
-			// case 'code':
-				// return '<span class="column-code">'. $item->code .'</span>';
-				// break;
-			
 			case 'user':
 				if ($item->user_id != null) {
 					$userProfilPageUrl = get_edit_user_link($item->user_id);
