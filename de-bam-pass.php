@@ -16,6 +16,11 @@ if (!defined('DEBAMPASS')) {
 	define('DEBAMPASS', __FILE__);
 }
 
+if (!defined('DEBAMPASSPATH')) {
+	define('DEBAMPASSPATH', basename(dirname(__FILE__)) . '/' . basename(__FILE__));
+}
+
+
 require dirname(DEBAMPASS) .'/inc/Gamajo_Template_Loader.php';
 require dirname(DEBAMPASS) .'/inc/PW_Template_Loader.php';
 
@@ -53,8 +58,11 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				add_action('init', array($this, 'init'));
 				
+				add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
+				
 				add_action('wp_enqueue_scripts', array($this, 'loadStylesScripts'));
 				add_action('admin_enqueue_scripts', array($this, 'loadStylesScriptsAdmin'));
+				
 				
 				// Ajax popin 'entrer code'
 				add_action('wp_ajax_enterCodePopin', array($this, 'enterCodePopin'));
@@ -87,12 +95,10 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				
 				// Page 'Mon compte'
-				add_filter('wc_memberships_my_memberships_column_names', array($this, 'myAccountOrders'));
-				add_action('wc_memberships_my_memberships_column_code', array($this, 'myAccountCodeColumn'));
-				
-				
-				add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
-				
+				// add_filter('wc_memberships_my_memberships_column_names', array($this, 'myAccountOrders'));
+				// add_action('wc_memberships_my_memberships_column_code', array($this, 'myAccountCodeColumn'));
+				add_action('wc_memberships_before_my_memberships', array($this, 'showPassCode'));
+
 				
 				
 				// Admin
@@ -496,14 +502,14 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			
 			
 			
-			// Ajout d'une colonne 'Code' sur la page 'Mon compte'
-			public function myAccountOrders($columns)
+			// Ajout d'une colonne 'Code' sur la page 'Mon compte' (pas utilisé finalement
+			/*public function myAccountOrders($columns)
 			{
 				$columns = array_splice($columns, 0, count($columns) - 1, true) + array('code' => __("Code", "debampass")) + array_splice($columns, count($columns) - 1, count($columns), true);
 				
 				return $columns;
 			}
-			// Gestion du contenu de la colonne 'Code' de la page 'Mon compte'
+			// Gestion du contenu de la colonne 'Code' de la page 'Mon compte' (pas utilisé finalement
 			public function myAccountCodeColumn($userMembership)
 			{
 				global $wpdb;
@@ -522,6 +528,47 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					echo $results[0]->code;
 				} else {
 					echo "";
+				}
+			}*/
+			// Affichage d'un bloc avec le numéro du code du pass courant
+			public function showPassCode()
+			{
+				$activeMemberships = wc_memberships_get_user_active_memberships();
+				$code = "";
+				
+				foreach ($activeMemberships as $aMembership) {
+					// On vérifie que la date de fin n'est pas dépassée
+					$dateOk = true;
+					if (trim($aMembership->get_end_date()) != "") {
+						$currentDate = new DateTime();
+						$memberShipEndDate = DateTime::createFromFormat('Y-m-d H:i:s', $aMembership->get_end_date());
+						
+						if ($currentDate > $memberShipEndDate) {
+							$dateOk = false;
+						}
+					}
+					
+					if ($aMembership->status == "wcm-active" && $dateOk) {
+						global $wpdb;
+				
+						$tableName = $wpdb->prefix ."debampass";
+						
+						$queryGetPass = "";
+						$queryGetPass .= "SELECT code ";
+						$queryGetPass .= "FROM $tableName ";
+						$queryGetPass .= "WHERE membership_plan = %d ";
+						$queryGetPass .= "AND user_id = %d";
+						
+						$code = $wpdb->get_var($wpdb->prepare($queryGetPass, $aMembership->plan_id, $aMembership->user_id));
+						
+						if ($code != "") {
+							break;
+						}
+					}
+				}
+				
+				if ($code != "") {
+					include 'templates/elements/my-account-card.php';
 				}
 			}
 			

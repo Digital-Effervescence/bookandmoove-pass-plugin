@@ -99,6 +99,14 @@
 
 
 
+/* My account */
+#bam-card {margin: 30px 0; text-align: center;}
+#bam-card .picture-container {display: inline-block; position: relative; max-width: 100%;}
+#bam-card .picture-container img {width: 100%; height: auto;}
+#bam-card .picture-container .card-code {position: absolute; left: 50%; top: 55%; font-family: monospace; font-size: 28px; color: #000000; white-space: nowrap; transform: translateX(-50%);}
+
+
+
 
 
 /* ADMIN*/
@@ -202,4 +210,6 @@
 @media (max-width: 480px)
 {
 	#de-bam-pass-popin-container .de-bam-pass-popin#de-bam-pass-enter-code-popin .popin-content .content input.pass-code {padding-left: 5px; padding-right: 5px; font-size: 14px;}
+	
+	#bam-card .picture-container .card-code {font-size: 24px;}
 }
