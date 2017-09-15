@@ -85,6 +85,12 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				add_action('wp_ajax_nopriv_messageValidationPass', array($this, 'messageValidationPass'));
 				
 				
+				
+				// Page 'Mon compte'
+				add_filter('wc_memberships_my_memberships_column_names', array($this, 'myAccountOrders'));
+				add_action('wc_memberships_my_memberships_column_code', array($this, 'myAccountCodeColumn'));
+				
+				
 				add_filter('wp_footer', array($this, 'deBamPassHtmlContainer'));
 				
 				
@@ -486,6 +492,37 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			public function loginRedirect($redirect_to, $request, $user)
 			{
 				return home_url() ."?de-bam=ec";
+			}
+			
+			
+			
+			// Ajout d'une colonne 'Code' sur la page 'Mon compte'
+			public function myAccountOrders($columns)
+			{
+				$columns = array_splice($columns, 0, count($columns) - 1, true) + array('code' => __("Code", "debampass")) + array_splice($columns, count($columns) - 1, count($columns), true);
+				
+				return $columns;
+			}
+			// Gestion du contenu de la colonne 'Code' de la page 'Mon compte'
+			public function myAccountCodeColumn($userMembership)
+			{
+				global $wpdb;
+				
+				$tableName = $wpdb->prefix ."debampass";
+				
+				$queryGetPass = "";
+				$queryGetPass .= "SELECT code ";
+				$queryGetPass .= "FROM $tableName ";
+				$queryGetPass .= "WHERE membership_plan = %d ";
+				$queryGetPass .= "AND user_id = %d";
+				
+				$results = $wpdb->get_results($wpdb->prepare($queryGetPass, $userMembership->plan_id, $userMembership->user_id));
+				
+				if (isset($results[0]) && isset($results[0]->code)) {
+					echo $results[0]->code;
+				} else {
+					echo "";
+				}
 			}
 			
 			

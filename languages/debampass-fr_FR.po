@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: de-bam-pass\n"
 "Report-Msgid-Bugs-To: https://wppopupmaker.com/support\n"
-"POT-Creation-Date: 2017-09-12 12:34+0200\n"
-"PO-Revision-Date: 2017-09-12 12:36+0200\n"
+"POT-Creation-Date: 2017-09-12 13:04+0200\n"
+"PO-Revision-Date: 2017-09-12 15:14+0200\n"
 "Last-Translator: \n"
 "Language-Team: Digital Effervescence <fredericl@digital-effervescence.com>\n"
 "Language: fr_FR\n"
@@ -102,24 +102,24 @@ msgid "There are only %d available codes left"
 msgstr "Il ne reste plus que %d codes disponibles"
 
 #: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:274
+#: inc/class-de-list-table.php:255
 msgid "Code"
 msgstr "Code"
 
 #: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:277 templates/admin/page-passes-generated.php:49
+#: inc/class-de-list-table.php:258 templates/admin/page-passes-generated.php:49
 msgid "Expiration date"
 msgstr "Date d'expiration"
 
 #: de-bam-pass.php:680 inc/class-de-csv-generator.php:24
-#: inc/class-de-list-table.php:276
+#: inc/class-de-list-table.php:257
 msgid "Membership Plan"
 msgstr "Membership Plan"
 
 #: de-bam-pass.php:740
 #, php-format
 msgid "%d pass inserted successfully"
-msgstr "%d pass insérés avec succès"
+msgstr "%d pass inséré(s) avec succès"
 
 #: de-bam-pass.php:749 de-bam-pass.php:838
 msgid "CSV file :"
@@ -129,10 +129,10 @@ msgstr "Fichier CSV :"
 msgid "An error occured while generating the CSV file"
 msgstr "Une erreur est survenue lors de la génération du fichier CSV"
 
-#: de-bam-pass.php:879
+#: de-bam-pass.php:886
 #, php-format
 msgid "%d passes successfully deleted."
-msgstr "%d pass supprimé(s) avec succès"
+msgstr "%d pass supprimé(s) avec succès."
 
 #: inc/class-de-csv-generator.php:24
 msgid "User Email"
@@ -142,21 +142,21 @@ msgstr "E-mail de l'utilisateur"
 msgid "User display name"
 msgstr "Nom d'affichage de l'utilisateur"
 
-#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:278
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:259
 #: templates/admin/page-passes-generated.php:66
 msgid "Activation date"
 msgstr "Date d'activation"
 
-#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:279
+#: inc/class-de-csv-generator.php:24 inc/class-de-list-table.php:260
 #: templates/admin/page-passes-generated.php:83
 msgid "Creation date"
 msgstr "Date de création"
 
-#: inc/class-de-list-table.php:134
+#: inc/class-de-list-table.php:134 inc/class-de-list-table.php:332
 msgid "Delete"
 msgstr "Supprimer"
 
-#: inc/class-de-list-table.php:275
+#: inc/class-de-list-table.php:256
 msgid "User"
 msgstr "Utilisateur"
 
@@ -317,7 +317,7 @@ msgstr "Fin"
 msgid "Passes search"
 msgstr "Recherche de pass"
 
-#: templates/admin/page-passes-generated.php:115
+#: templates/admin/page-passes-generated.php:109
 msgid "Download data in CSV format"
 msgstr "Télécharger les données au format CSV"
 
