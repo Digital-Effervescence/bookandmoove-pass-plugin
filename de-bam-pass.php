@@ -93,6 +93,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				add_action('wp_ajax_nopriv_messageValidationPass', array($this, 'messageValidationPass'));
 				
 				
+				add_filter('woocommerce_checkout_fields', array($this, 'customOverrideCheckoutFields'));
+				
 				
 				// Page 'Mon compte'
 				// add_filter('wc_memberships_my_memberships_column_names', array($this, 'myAccountOrders'));
@@ -498,6 +500,19 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 			public function loginRedirect($redirect_to, $request, $user)
 			{
 				return home_url() ."?de-bam=ec";
+			}
+			
+			
+			public function customOverrideCheckoutFields($fields)
+			{
+				// Suppression des champs 'Entreprise' et 'État/Comté' du formulaire de commande
+				unset($fields['billing']['billing_company']);
+				unset($fields['billing']['billing_state']);
+				
+				unset($fields['shipping']['shipping_company']);
+				unset($fields['shipping']['shipping_state']);
+				
+				return $fields;
 			}
 			
 			
