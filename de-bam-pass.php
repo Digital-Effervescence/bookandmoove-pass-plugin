@@ -1257,31 +1257,35 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 								// Ce MembershipPlan est associé au produit courant
 								if ($aMembershipPlan->has_product($anItem['product_id'])) {
 									$membership = wc_memberships_get_user_membership($userId, $aMembershipPlan->id);
-									$membership->pause_membership(); // On met en 'pause' le membership de l'utilisateur qui a fait la commande
-									// Tools::WriteLog($membership);
 									
-									// Commande terminée
-									if ($newStatus == 'completed' && $oldStatus != 'completed') {
-										global $wpdb;
-				
-										$tableDeBamPass = $wpdb->prefix ."debampass";
+									// Si on ne vient pas de faire la commande
+									if ($membership && !($oldStatus == "pending" && $newStatus == "on-hold")) {
+										$membership->pause_membership(); // On met en 'pause' le membership de l'utilisateur qui a fait la commande
+										// Tools::WriteLog($membership);
 										
-										// On vérifie que l'on n'a pas déjà inséré un nouveau pass en BDD
-										$queryCheckOrder = "";
-										$queryCheckOrder .= "SELECT id ";
-										$queryCheckOrder .= "FROM $tableDeBamPass ";
-										$queryCheckOrder .= "WHERE order_id = %d";
-										
-										$result = $wpdb->query($wpdb->prepare($queryCheckOrder, $orderId));
+										// Commande terminée
+										if ($newStatus == 'completed' && $oldStatus != 'completed') {
+											global $wpdb;
 					
-										if ($result == 0) { // On n'en a pas déjà
-											// On génère un nouveau pass
-											$expirationDate = new DateTime();
-											$expirationDate->modify('+1 month');
+											$tableDeBamPass = $wpdb->prefix ."debampass";
 											
-											$generationReturnedData = $this->generatePasses(1, $expirationDate->format('Y-m-d'), $membership->plan, $orderId); // On génère un pass
+											// On vérifie que l'on n'a pas déjà inséré un nouveau pass en BDD
+											$queryCheckOrder = "";
+											$queryCheckOrder .= "SELECT id ";
+											$queryCheckOrder .= "FROM $tableDeBamPass ";
+											$queryCheckOrder .= "WHERE order_id = %d";
 											
-											do_action('debampass_order_completed', $orderId, $userId, $generationReturnedData['lastGeneratedCode']);
+											$result = $wpdb->query($wpdb->prepare($queryCheckOrder, $orderId));
+						
+											if ($result == 0) { // On n'en a pas déjà
+												// On génère un nouveau pass
+												$expirationDate = new DateTime();
+												$expirationDate->modify('+1 month');
+												
+												$generationReturnedData = $this->generatePasses(1, $expirationDate->format('Y-m-d'), $membership->plan, $orderId); // On génère un pass
+												
+												do_action('debampass_order_completed', $orderId, $userId, $generationReturnedData['lastGeneratedCode']);
+											}
 										}
 									}
 								}
