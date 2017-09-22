@@ -101,6 +101,8 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				// add_filter('wc_memberships_my_memberships_column_names', array($this, 'myAccountOrders'));
 				// add_action('wc_memberships_my_memberships_column_code', array($this, 'myAccountCodeColumn'));
 				add_action('wc_memberships_before_my_memberships', array($this, 'showPassCode'));
+				
+				add_filter('woocommerce_locate_template', array($this, 'woocommerceLocateTemplates'), 20, 3);
 
 				
 				
@@ -572,6 +574,24 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 					echo "";
 				}
 			}*/
+			
+			/*public function myAccountStatusColumn($userMembership)
+			{
+				echo "yo";
+				echo "<pre>";
+				print_r($userMembership);
+				echo "</pre>";
+			}*/
+			
+			/*public function myAccountTable($columns)
+			{
+				// echo "<pre>";
+				// print_r($columns);
+				// echo "</pre>";
+				
+				return $columns;
+			}*/
+			
 			// Affichage d'un bloc avec le numéro du code du pass courant
 			public function showPassCode()
 			{
@@ -632,6 +652,15 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				if ($code != "") {
 					include 'templates/elements/my-account-card.php';
 				}
+			}
+			
+			public function woocommerceLocateTemplates($template, $templateName, $templatePath)
+			{
+				if ($templateName == "myaccount/my-memberships.php") {
+					$template = dirname(DEBAMPASS) .'/templates/'. $templateName;
+				}
+				
+				return $template;
 			}
 			
 			

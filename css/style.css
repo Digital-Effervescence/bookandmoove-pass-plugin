@@ -105,6 +105,8 @@
 #bam-card .picture-container img {width: 100%; height: auto;}
 #bam-card .picture-container .card-code {position: absolute; left: 50%; top: 55%; font-family: monospace; font-size: 28px; color: #000000; white-space: nowrap; transform: translateX(-50%);}
 
+.my_account_memberships tr.membership.paused {display: none;}
+
 
 
 
