@@ -230,7 +230,7 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 		
 		
 		$this->querySelectGeneratedPasses = "";
-		$this->querySelectGeneratedPasses .= "SELECT dbp.id, dbp.membership_plan, dbp.user_id, dbp.code, dbp.date_end_code_active, dbp.created_at, dbp.updated_at, u.ID as id_user, u.user_email, u.display_name, p.ID AS id_post, p.post_title, p.post_name ";
+		$this->querySelectGeneratedPasses .= "SELECT dbp.id, dbp.membership_plan, dbp.user_id, dbp.order_id, dbp.code, dbp.date_end_code_active, dbp.created_at, dbp.updated_at, u.ID as id_user, u.user_email, u.display_name, p.ID AS id_post, p.post_title, p.post_name ";
 		$this->querySelectGeneratedPasses .= "FROM $tableDeBamPass dbp ";
 		$this->querySelectGeneratedPasses .= "LEFT JOIN $tableUsers u ON dbp.user_id = u.ID ";
 		$this->querySelectGeneratedPasses .= "LEFT JOIN $tablePosts p ON dbp.membership_plan = p.ID ";
@@ -254,6 +254,7 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 			'cb' => '<input type="checkbox" />',
 			'code' => __("Code", "debampass"),
 			'user' => __("User", "debampass"),
+			'order' => __("Order", "debampass"),
 			'membership_plan_name' => __("Membership Plan", "debampass"),
 			'date_end_code_active' => __("Expiration date", "debampass"),
 			'updated_at' => __("Activation date", "debampass"),
@@ -270,6 +271,12 @@ class DE_List_Table_Pass_Generated extends DE_List_Table
 				if ($item->user_id != null) {
 					$userProfilPageUrl = get_edit_user_link($item->user_id);
 					return '<a href="'. $userProfilPageUrl .'">'. $item->display_name ."<br />". $item->user_email .'</a>';
+				}
+				break;
+			
+			case 'order':
+				if ($item->order_id != null) {
+					return '<a href="'. admin_url('post.php?post='. $item->order_id .'&action=edit') .'">#'. $item->order_id .'</a>';
 				}
 				break;
 			

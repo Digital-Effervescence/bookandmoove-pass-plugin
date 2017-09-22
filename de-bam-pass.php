@@ -654,6 +654,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 			}
 			
+			// Surcharge des template Woocommerce
 			public function woocommerceLocateTemplates($template, $templateName, $templatePath)
 			{
 				if ($templateName == "myaccount/my-memberships.php") {
