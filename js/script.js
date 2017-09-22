@@ -16,44 +16,25 @@
 		
 		// Clics sur 'Enregistrer mon code' -> ouverture de la popin de connexion/inscription
 		$("#page ul.primary-menu").on("click", ".menu-item.save-code", function () {
-			/*if (!popinLoading) {
-				popinLoading = true;
-				showLoader();
-				
-				$.ajax({
-					url: ajax_object.ajaxurl,
-					data: {action: "loadRegistrationPopin"},
-					type: "POST",
-					success: function (data) {
-						$("#de-bam-pass-popin-container").append(data);
-						
-						closePopinManager();
-						
-						loginManager();
-					},
-					error: function (qXHR, textStatus, errorThrown) {
-						console.log(qXHR +" || "+ textStatus +" || "+ errorThrown);
-					},
-					complete: function () {
-						popinLoading = false;
-						hideLoader();
-					}
-				});
-			}*/
-			
 			displayActivationPassPopin();
 		});
 		
 		// On récupère les éventuels paramètre dans l'url
 		var deBamParam = getVar("de-bam");
 		var deBamCode = getVar("code");
+		var deBamOrderId = getVar("orderid");
 		
-		// On veut afficher la popin d'inscription (commande)
+		// On vient de la redirection après la connexion
 		if (deBamParam && deBamParam == "ec" && deBamCode) {
 			deBamPassCode = deBamCode;
 			
-			displayRegistrationPopin();
+			if (deBamOrderId) { // On veut finaliser l'activation d'un pass déjà commandé
+				finalizeOrder(deBamOrderId);
+			} else { // On veut afficher la popin d'inscription (commande)
+				displayRegistrationPopin();
+			}
 		}
+		
 		
 		// On veut afficher la popin permettant d'activer son pass
 		/*if (deBamParam && deBamParam == "ec") {
@@ -144,6 +125,7 @@
 				closePopinManager();
 				
 				// Validation du formulaire de saisie d'un code
+				$("#de-bam-pass-popin-container").off("submit", "#enter-code-form");
 				$("#de-bam-pass-popin-container").on("submit", "#enter-code-form", function (event) {
 					event.preventDefault();
 					$("#de-bam-pass-enter-code-popin .errors").text("").removeClass("open");
@@ -161,12 +143,20 @@
 							// console.log(data);
 							if (data.status == "success") {
 								if (data.passExists == 1) { // Le code du pass est bon, on passe à la suite
-									if (data.loggued) { // Si l'utilisateur est loggué -> on affiche le formulaire
-										displayRegistrationPopin();
-									} else { // Si l'utilisateur n'est pas loggué -> On affiche la popin permettant de se logguer ou de s'inscrire
-										displayLoginRegistrationPopin();
-										
-										hideLoaderAbove();
+									if (data.orderId == "null") { // On n'a pas déjà fait une commande du pass
+										if (data.loggued) { // Si l'utilisateur est loggué -> on affiche le formulaire
+											displayRegistrationPopin();
+										} else { // Si l'utilisateur n'est pas loggué -> On affiche la popin permettant de se logguer ou de s'inscrire
+											displayLoginRegistrationPopin();
+											
+											hideLoaderAbove();
+										}
+									} else { // On a déjà une commande, on veut juste activer le pass
+										if (data.loggued) { // Si l'utilisateur est loggué -> on finalize l'activation du pass
+											finalizeOrder(data.orderId);
+										} else { // Si l'utilisateur n'est pas loggué -> On affiche le formulaire de connexion
+											loginRedirectionManager("undefined", data.orderId);
+										}
 									}
 								} else { // Le code n'existe pas, est déjà pris ou n'est pas actif
 									enterCodeValidationShowMessage(data.message);
@@ -212,6 +202,9 @@
 				type: "POST",
 				success: function (data) {
 					$("#de-bam-pass-popin-container").append(data);
+					var urlLogin = $("#de-bam-pass-popin-container .login a.de-bam-pass-button").attr("href");
+					urlLogin = urlAddParameter(urlLogin, 'code', deBamPassCode);
+					$("#de-bam-pass-popin-container .login a.de-bam-pass-button").attr("href", urlLogin);
 					
 					closePopinManager();
 					
@@ -316,7 +309,7 @@
 					
 					if (data.result == "success") { // OK
 						// On veut finaliser la commande
-						finalizeOrder(data.redirect);
+						finalizeOrderInit(data.redirect);
 					} else if (data.result == "failure") { // Erreur de validation
 						// Si on n'a pas le container des messages d'erreurs de créé
 						if ($("#de-bam-pass-form-popin form#order_review .form-errors-container").length == 0) {
@@ -345,13 +338,18 @@
 		});
 	}
 	
-	function finalizeOrder(url)
+	function finalizeOrderInit(url)
 	{
 		// On récupère l'ID de la commande dans l'url (un peu de la bidouille, mais bon...)
 		var urlSplited = url.split('?');
 		var urlSplitedSlash = urlSplited[0].split('/');
 		var idOrder = urlSplitedSlash[urlSplitedSlash.length - 1];
 		
+		finalizeOrder(idOrder);
+	}
+	
+	function finalizeOrder(idOrder)
+	{
 		// On veut finaliser la commande
 		$.ajax({
 			url: ajax_object.ajaxurl,
@@ -476,8 +474,8 @@
 	function loginManager()
 	{
 		$('#de-bam-pass-registration-popin .login').on("click", "a.de-bam-pass-button", function (event) {
-			// Ouverture de la popin avec le formulaire de connexion (si possible)
-			if ($(".lwa .lwa-links-modal").length == 1 && $(".lwa .lwa-modal").length == 1) {
+			
+			/*if ($(".lwa .lwa-links-modal").length == 1 && $(".lwa .lwa-modal").length == 1) {
 				event.preventDefault();
 				
 				closePopin($("#de-bam-pass-popin-container .de-bam-pass-popin")); // On ferme la popin courante (connexion/inscription)
@@ -488,8 +486,43 @@
 				var url = urlAddParameter(document.location.href, 'de-bam', 'ec');
 				url = urlAddParameter(url, 'code', deBamPassCode);
 				$(".lwa-modal .lwa-submit-wrapper").append('<input type="hidden" name="redirect_to" value="'+ url +'" />');
-			}
+			}*/
+			
+			loginRedirectionManager(event);
 		});
+	}
+	
+	function loginRedirectionManager(event, orderId)
+	{
+		// Ouverture de la popin avec le formulaire de connexion (si possible)
+		if ($(".lwa .lwa-links-modal").length == 1 && $(".lwa .lwa-modal").length == 1) {
+			if (typeof event != "undefined" && event != "undefined") {
+				event.preventDefault();
+			}
+			
+			closePopin($("#de-bam-pass-popin-container .de-bam-pass-popin")); // On ferme la popin courante
+			
+			$(".lwa .lwa-links-modal").trigger("click"); // On ouvre la popin avec le formulaire de connexion
+			
+			// On veut ajouter un paramètre dans le formulaire de connexion pour rediriger l'utilisateur lorsqu'il se connecte
+			var url = urlAddParameter(document.location.href, 'de-bam', 'ec');
+			url = urlAddParameter(url, 'code', deBamPassCode);
+			
+			if (typeof orderId != "undefined") {
+				url = urlAddParameter(url, 'orderid', orderId);
+			}
+			
+			$(".lwa-modal .lwa-submit-wrapper").append('<input type="hidden" name="redirect_to" value="'+ url +'" />');
+		} else {
+			var urlLogin = urlAddParameter(loginUrl, "de-bam", "lo");
+			urlLogin = urlAddParameter(urlLogin, "code", deBamPassCode);
+			
+			if (typeof orderId != "undefined") {
+				urlLogin = urlAddParameter(urlLogin, "orderid", orderId);
+			}
+			
+			document.location.href = urlLogin;
+		}
 	}
 	
 	
