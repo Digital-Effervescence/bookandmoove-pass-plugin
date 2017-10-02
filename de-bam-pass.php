@@ -53,7 +53,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				$this->templates = new PW_Template_Loader(plugin_dir_path(__FILE__));
 				
 				
-				add_filter('show_admin_bar', '__return_false'); // TMP
+				// add_filter('show_admin_bar', '__return_false'); // TMP
 				
 				$this->loadTranslations();
 				
