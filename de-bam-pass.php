@@ -103,6 +103,10 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				add_action('wc_memberships_before_my_memberships', array($this, 'showPassCode'));
 				
 				add_filter('woocommerce_locate_template', array($this, 'woocommerceLocateTemplates'), 20, 3);
+                
+                
+                // Avant la création d'une réservation
+                add_action('booked_before_creating_appointment', array($this, 'beforeAppointment'));
 
 				
 				
@@ -114,7 +118,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				add_filter('woocommerce_email_classes', array($this, 'addSendPassCodeWoocommerceEmail'));
 			}
-			
+            
 			
 			// Installation du plugin
 			public function install()
@@ -662,6 +666,18 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				}
 				
 				return $template;
+			}
+            
+            
+            public function beforeAppointment()
+            {
+                if (!wc_memberships_is_user_member()) { // Pas du tout membership
+                    echo 'error###'. esc_html__('You must have a pass to make a reservation.', 'debampass');
+                    exit();
+                } elseif (wc_memberships_is_user_member() && !wc_memberships_is_user_active_member()) { // Membership mais non actif
+                    echo 'error###'. esc_html__('Your pass is not or no longer active.', 'debampass');
+                    exit();
+                }
 			}
 			
 			
