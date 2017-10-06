@@ -516,7 +516,7 @@ if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_
 				
 				wp_enqueue_style('de_bam_style_admin', plugin_dir_url(__FILE__) .'css/style.css', array(), false, 'screen');
 				
-				wp_register_style('jquery-ui', 'http://code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
+				wp_register_style('jquery-ui', '//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css');
 				wp_enqueue_style('jquery-ui');
 			}
 			
